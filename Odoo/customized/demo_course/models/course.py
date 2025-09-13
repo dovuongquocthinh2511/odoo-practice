@@ -53,7 +53,7 @@ class DemoStudent(models.Model):
                                     column1='col_student_id',
                                     column2='col_class_id')
     # khai báo field age
-    age = fields.Integer() 
+    age = fields.Integer()  
     name_age_combine = fields.Char()
     name_age_compute = fields.Char(compute="compute_name_age_combine_field")
     age_copy = fields.Integer(compute="copy_age", inverse="reverse_age")
@@ -66,7 +66,7 @@ class DemoStudent(models.Model):
                 raise ValidationError("Age is not allowed to be less than 10.")
             if len(record.name) > 15:
                 raise ValidationError("Too long name for student (%d>15)." % len(record.name))
-    
+     
     # tính toán cập nhật:
     @api.onchange('name', 'age')
     def update_name_age_combine_field(self):
@@ -89,7 +89,7 @@ class DemoStudent(models.Model):
                 record.age_copy = record.age
 
     def reverse_age(self):
-        for record in self:
+        for record in self: 
             record.age = record.age_copy
 
 class DemoRegister(models.Model):
@@ -99,4 +99,4 @@ class DemoRegister(models.Model):
     name = fields.Char('Register Name', required=True)
     # Hiện thực field one2one ở model còn lại:
     class_id = fields.Many2one('demo_course.class', string='Class')
-    
+     
