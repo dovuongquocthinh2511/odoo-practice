@@ -211,3 +211,18 @@ data/
 
 # Claude
 .claude/
+.serena/
+
+.vscode/
+.cursor/
+.idea/
+.marimo/
+
+bestmix_addons/
+ccpm/
+claudedocs/
+gh_cli/
+task/
+
+
+

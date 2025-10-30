@@ -1,14 +1,17 @@
-version: "3.9"
-
 services:
   odoo:
     build: ./box
     ports:
       - "8069:8069"
+      - "5678:5678"  # Debug port for debugpy
     volumes:
-      - ./:/opt/odoo
-      - odoo_data:/root/.local/share/Odoo
-    user: root
+      - ./customized:/mnt/extra-addons
+      - ./odoo_enterprise_18:/mnt/odoo_enterprise_18
+      - ./odoo.conf:/etc/odoo/odoo.conf
+      - odoo_data:/var/lib/odoo
+    user: odoo
+    environment:
+      - PYTHONUNBUFFERED=1  # Enable real-time logging for debugging
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:8069" ]
       interval: 30s
@@ -19,7 +22,10 @@ services:
       # - nginx
     restart: unless-stopped
     tty: true
-    command: bash -c "python3 /opt/odoo/odoo/odoo-bin --addons-path=/opt/odoo/odoo/addons,/opt/odoo/customized -c /opt/odoo/odoo.conf && tail -f /dev/null"
+    # Debug mode: Uncomment dòng dưới và comment dòng "Normal mode" để debug với VS Code
+    # command: python3 -Xfrozen_modules=off -m debugpy --listen 0.0.0.0:5678 --wait-for-client /usr/bin/odoo -c /etc/odoo/odoo.conf
+    # Normal mode: Chạy Odoo bình thường
+    command: odoo -c /etc/odoo/odoo.conf
 
   postgres:
     image: postgres:13

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Fleet Team Form View -->
+    <record id="view_fleet_team_form" model="ir.ui.view">
+        <field name="name">bm.fleet.team.form</field>
+        <field name="model">bm.fleet.team</field>
+        <field name="arch" type="xml">
+            <form string="Team">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" string="Team Name"/>
+                            <field name="manager_id" string="Team Leader"/>
+                        </group>
+                        <group>
+                            <field name="member_count" string="Member Count" readonly="1"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Members" name="members">
+                            <field name="member_ids">
+                                <list editable="bottom">
+                                    <field name="user_id" string="Name"/>
+                                    <field name="manager_id" string="Manager" readonly="1"/>
+                                    <field name="sale_admin_id" string="Sale Admin" readonly="1" optional="show"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Other Information" name="other_info">
+                            <group>
+                                <field name="parent_id"/>
+                                <field name="company_id"/>
+                                <field name="active"/>
+                                <field name="description"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Fleet Team List View -->
+    <record id="view_fleet_team_list" model="ir.ui.view">
+        <field name="name">bm.fleet.team.list</field>
+        <field name="model">bm.fleet.team</field>
+        <field name="arch" type="xml">
+            <list string="Team List">
+                <field name="name" string="Team Name"/>
+                <field name="manager_id" string="Team Leader"/>
+                <field name="member_count" string="Member Count"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Fleet Team Action -->
+    <record id="action_fleet_team" model="ir.actions.act_window">
+        <field name="name">Team</field>
+        <field name="res_model">bm.fleet.team</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first team
+            </p>
+        </field>
+    </record>
+
+</odoo>

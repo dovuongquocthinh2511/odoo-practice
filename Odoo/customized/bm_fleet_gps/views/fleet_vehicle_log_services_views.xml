@@ -1,0 +1,478 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Override action to set Kanban as default view -->
+    <record id="fleet.fleet_vehicle_log_services_action" model="ir.actions.act_window">
+        <field name="view_mode">kanban,list,form,graph,pivot,activity</field>
+        <field name="context">{'search_default_active_services': 1}</field>
+    </record>
+
+    <!-- Action for User: Booking Request with Wizard Button -->
+    <record id="fleet_vehicle_services_user_action" model="ir.actions.act_window">
+        <field name="name">Booking</field>
+        <field name="res_model">fleet.vehicle.log.services</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="domain">[]</field>
+        <field name="context">{
+            'search_default_active_services': 1,
+        }</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Register new vehicle booking
+            </p>
+            <p>
+                Click "Vehicle Booking Registration" button to create new request
+            </p>
+        </field>
+    </record>
+
+    <!-- Fleet Vehicle Log Services Kanban View for Users with Custom Create Button -->
+    <record id="view_fleet_vehicle_log_services_kanban_user" model="ir.ui.view">
+        <field name="name">fleet.vehicle.log.services.kanban.user</field>
+        <field name="model">fleet.vehicle.log.services</field>
+        <field name="priority">15</field>
+        <field name="groups_id" eval="[(4, ref('bm_fleet_gps.group_bm_fleet_user'))]"/>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state" quick_create="false" class="o_kanban_small_column"
+                    create="true" string="Vehicle Booking Registration" on_create="bm_fleet_gps.action_fleet_service_booking_wizard_menu"
+                    records_draggable="false">
+                <field name="name"/>
+                <field name="service_category"/>
+                <field name="vehicle_id"/>
+                <field name="driver_id"/>
+                <field name="date"/>
+                <field name="state" readonly="1"/>
+                <field name="activity_ids"/>
+                <field name="activity_state"/>
+                <field name="work_location"/>
+                <field name="submitted_by"/>
+                <progressbar field="activity_state" colors='{"planned": "success", "today": "warning", "overdue": "danger"}'/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click">
+                            <div class="o_kanban_record_top">
+                                <div class="o_kanban_record_headings">
+                                    <strong class="o_kanban_record_title">
+                                        <field name="name"/>
+                                    </strong>
+                                    <div class="o_kanban_record_subtitle">
+                                        <field name="service_category"/>
+                                    </div>
+                                    <div class="o_kanban_record_subtitle text-muted" t-if="record.submitted_by.raw_value">
+                                        <i class="fa fa-user-circle-o"/> <field name="submitted_by"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="o_kanban_record_body">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <i class="fa fa-car"/> <field name="vehicle_id"/>
+                                    </div>
+                                    <div class="col-12" t-if="record.driver_id.raw_value">
+                                        <i class="fa fa-user"/> <field name="driver_id"/>
+                                    </div>
+                                    <div class="col-12">
+                                        <i class="fa fa-calendar"/> <field name="date"/>
+                                    </div>
+                                    <div class="col-12" t-if="record.work_location.raw_value">
+                                        <i class="fa fa-briefcase"/> <field name="work_location"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="o_kanban_record_bottom">
+                                <div class="oe_kanban_bottom_left">
+                                    <field name="activity_ids" widget="kanban_activity"/>
+                                </div>
+                                <div class="oe_kanban_bottom_right">
+                                    <field name="state" widget="label_selection"
+                                           options="{'classes': {'new': 'secondary', 'pending_manager': 'info', 'pending_dispatch': 'warning', 'running': 'primary', 'done': 'success', 'cancelled': 'danger'}}"/>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Fleet Vehicle Log Services Kanban View (Sale Admin - No Drag-Drop) -->
+    <record id="view_fleet_vehicle_log_services_kanban_sale_admin" model="ir.ui.view">
+        <field name="name">fleet.vehicle.log.services.kanban.sale_admin</field>
+        <field name="model">fleet.vehicle.log.services</field>
+        <field name="priority">10</field>
+        <field name="groups_id" eval="[(4, ref('bm_fleet_gps.group_bm_fleet_sale_admin'))]"/>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state" quick_create="false" class="o_kanban_small_column" create="0"
+                    records_draggable="false">
+                <field name="name"/>
+                <field name="service_category"/>
+                <field name="vehicle_id"/>
+                <field name="driver_id"/>
+                <field name="date"/>
+                <field name="state" readonly="1"/>
+                <field name="activity_ids"/>
+                <field name="activity_state"/>
+                <field name="submitted_by"/>
+                <field name="work_location"/>
+                <progressbar field="activity_state" colors='{"planned": "success", "today": "warning", "overdue": "danger"}'/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click">
+                            <div class="o_kanban_record_top">
+                                <div class="o_kanban_record_headings">
+                                    <strong class="o_kanban_record_title">
+                                        <field name="name"/>
+                                    </strong>
+                                    <div class="o_kanban_record_subtitle">
+                                        <field name="service_category"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="o_kanban_record_body">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <i class="fa fa-car"/> <field name="vehicle_id"/>
+                                    </div>
+                                    <div class="col-12" t-if="record.driver_id.raw_value">
+                                        <i class="fa fa-user"/> <field name="driver_id"/>
+                                    </div>
+                                    <div class="col-12">
+                                        <i class="fa fa-calendar"/> <field name="date"/>
+                                    </div>
+                                    <div class="col-12" t-if="record.work_location.raw_value">
+                                        <i class="fa fa-briefcase"/> <field name="work_location"/>
+                                    </div>
+                                    <div class="col-12 text-muted" t-if="record.submitted_by.raw_value">
+                                        <i class="fa fa-user-circle-o"/> <field name="submitted_by"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="o_kanban_record_bottom">
+                                <div class="oe_kanban_bottom_left">
+                                    <field name="activity_ids" widget="kanban_activity"/>
+                                </div>
+                                <div class="oe_kanban_bottom_right">
+                                    <field name="state" widget="label_selection"
+                                           options="{'classes': {'new': 'secondary', 'pending_manager': 'info', 'pending_dispatch': 'warning', 'running': 'primary', 'done': 'success', 'cancelled': 'danger'}}"/>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Fleet Vehicle Log Services Kanban View (Base Admin - WITH Drag-Drop) -->
+    <record id="view_fleet_vehicle_log_services_kanban_base_admin" model="ir.ui.view">
+        <field name="name">fleet.vehicle.log.services.kanban.base_admin</field>
+        <field name="model">fleet.vehicle.log.services</field>
+        <field name="priority">5</field>
+        <field name="groups_id" eval="[(4, ref('base.group_system'))]"/>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state" quick_create="false" class="o_kanban_small_column" create="0">
+                <field name="name"/>
+                <field name="service_category"/>
+                <field name="vehicle_id"/>
+                <field name="driver_id"/>
+                <field name="date"/>
+                <field name="state"/>
+                <field name="activity_ids"/>
+                <field name="activity_state"/>
+                <field name="work_location"/>
+                <field name="submitted_by"/>
+                <progressbar field="activity_state" colors='{"planned": "success", "today": "warning", "overdue": "danger"}'/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click">
+                            <div class="o_kanban_record_top">
+                                <div class="o_kanban_record_headings">
+                                    <strong class="o_kanban_record_title">
+                                        <field name="name"/>
+                                    </strong>
+                                    <div class="o_kanban_record_subtitle">
+                                        <field name="service_category"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="o_kanban_record_body">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <i class="fa fa-car"/> <field name="vehicle_id"/>
+                                    </div>
+                                    <div class="col-12" t-if="record.driver_id.raw_value">
+                                        <i class="fa fa-user"/> <field name="driver_id"/>
+                                    </div>
+                                    <div class="col-12">
+                                        <i class="fa fa-calendar"/> <field name="date"/>
+                                    </div>
+                                    <div class="col-12" t-if="record.work_location.raw_value">
+                                        <i class="fa fa-briefcase"/> <field name="work_location"/>
+                                    </div>
+                                    <div class="col-12 text-muted" t-if="record.submitted_by.raw_value">
+                                        <i class="fa fa-user-circle-o"/> <field name="submitted_by"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="o_kanban_record_bottom">
+                                <div class="oe_kanban_bottom_left">
+                                    <field name="activity_ids" widget="kanban_activity"/>
+                                </div>
+                                <div class="oe_kanban_bottom_right">
+                                    <field name="state" widget="label_selection"
+                                           options="{'classes': {'new': 'secondary', 'pending_manager': 'info', 'pending_dispatch': 'warning', 'running': 'primary', 'done': 'success', 'cancelled': 'danger'}}"/>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Fleet Vehicle Log Services List View for Users with Custom Create Button -->
+    <record id="view_fleet_vehicle_log_services_list_user" model="ir.ui.view">
+        <field name="name">fleet.vehicle.log.services.list.user</field>
+        <field name="model">fleet.vehicle.log.services</field>
+        <field name="priority">15</field>
+        <field name="arch" type="xml">
+            <list string="Services" decoration-info="state=='pending_manager'"
+                  decoration-warning="state=='pending_dispatch'" decoration-primary="state=='running'"
+                  decoration-success="state=='done'" decoration-danger="state=='cancelled'"
+                  create="false">
+                <field name="name"/>
+                <field name="date"/>
+                <field name="service_category"/>
+                <field name="vehicle_id"/>
+                <field name="driver_id"/>
+                <field name="description"/>
+                <field name="amount"/>
+                <field name="state" widget="badge" decoration-info="state=='pending_manager'"
+                       decoration-warning="state=='pending_dispatch'" decoration-primary="state=='running'"
+                       decoration-success="state=='done'" decoration-danger="state=='cancelled'"/>
+                <field name="activity_ids" widget="list_activity"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Specify user-specific views for the user action -->
+    <record id="fleet_vehicle_services_user_action_kanban_view" model="ir.actions.act_window.view">
+        <field name="sequence" eval="1"/>
+        <field name="view_mode">kanban</field>
+        <field name="view_id" ref="view_fleet_vehicle_log_services_kanban_user"/>
+        <field name="act_window_id" ref="fleet_vehicle_services_user_action"/>
+    </record>
+
+    <record id="fleet_vehicle_services_user_action_list_view" model="ir.actions.act_window.view">
+        <field name="sequence" eval="2"/>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="view_fleet_vehicle_log_services_list_user"/>
+        <field name="act_window_id" ref="fleet_vehicle_services_user_action"/>
+    </record>
+
+    <!-- Fleet Vehicle Log Services List View (Original - for Manager/Admin) -->
+    <record id="view_fleet_vehicle_log_services_list" model="ir.ui.view">
+        <field name="name">fleet.vehicle.log.services.list</field>
+        <field name="model">fleet.vehicle.log.services</field>
+        <field name="arch" type="xml">
+            <list string="Services" decoration-info="state=='pending_manager'"
+                  decoration-warning="state=='pending_dispatch'" decoration-primary="state=='running'"
+                  decoration-success="state=='done'" decoration-danger="state=='cancelled'">
+                <field name="name"/>
+                <field name="date"/>
+                <field name="service_category"/>
+                <field name="vehicle_id"/>
+                <field name="driver_id"/>
+                <field name="description"/>
+                <field name="amount"/>
+                <field name="state" widget="badge" decoration-info="state=='pending_manager'"
+                       decoration-warning="state=='pending_dispatch'" decoration-primary="state=='running'"
+                       decoration-success="state=='done'" decoration-danger="state=='cancelled'"/>
+                <field name="activity_ids" widget="list_activity"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Fleet Vehicle Log Services Form View - Standalone (No Inheritance) -->
+    <record id="view_fleet_vehicle_log_services_form_v2" model="ir.ui.view">
+        <field name="name">fleet.vehicle.log.services.form.v2</field>
+        <field name="model">fleet.vehicle.log.services</field>
+        <field name="priority">1</field>
+        <field name="arch" type="xml">
+            <form string="Booking Request" create="false">
+                <!-- Header with workflow buttons and statusbar -->
+                <header>
+                    <!-- Stage 1: New Request -->
+                    <button name="action_submit" string="Submit for Approval" type="object"
+                            invisible="state != 'new'" class="oe_highlight"/>
+
+                    <!-- Stage 2: Manager Approval - Assigned Manager and Base Admin -->
+                    <button name="action_manager_approve" string="Approve" type="object"
+                            invisible="state != 'pending_manager' or manager_id != uid" class="oe_highlight"
+                            groups="bm_fleet_gps.group_bm_fleet_user,base.group_system"/>
+                    <button name="action_manager_reject" string="Reject" type="object"
+                            invisible="state != 'pending_manager' or manager_id != uid"
+                            groups="bm_fleet_gps.group_bm_fleet_user,base.group_system"/>
+
+                    <!-- Stage 3: Pending Dispatch - Sale Admin and Base Admin -->
+                    <button name="action_dispatch_approve" string="Dispatch Vehicle" type="object"
+                            invisible="state != 'pending_dispatch'" class="oe_highlight"
+                            groups="bm_fleet_gps.group_bm_fleet_sale_admin,base.group_system"/>
+                    <button name="action_dispatch_reject" string="Reject" type="object"
+                            invisible="state != 'pending_dispatch'"
+                            groups="bm_fleet_gps.group_bm_fleet_sale_admin,base.group_system"/>
+
+                    <!-- Stage 4: Running - Sale Admin and Base Admin -->
+                    <button name="action_set_to_done" string="Complete" type="object"
+                            invisible="state != 'running'" class="oe_highlight"
+                            groups="bm_fleet_gps.group_bm_fleet_sale_admin,base.group_system"/>
+
+                    <!-- Reset from Cancelled -->
+                    <button name="action_reset_to_new" string="Reset" type="object"
+                            invisible="state != 'cancelled'"/>
+
+                    <!-- Statusbar -->
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="new,pending_manager,pending_dispatch,running,done,cancelled"/>
+                </header>
+
+                <sheet>
+                    <!-- Smart Buttons -->
+                    <div class="oe_button_box" name="button_box">
+                        <!-- Journey Waypoints Button -->
+                        <button class="oe_stat_button"
+                                type="object"
+                                name="action_view_transportation_journeys"
+                                icon="fa-road"
+                                invisible="vehicle_id == False"
+                                help="View GPS waypoints for the dispatched vehicle">
+                            <field string="Journey" name="transportation_journey_count" widget="statinfo"/>
+                        </button>
+
+                        <!-- Journey Map Button -->
+                        <button class="oe_stat_button"
+                                type="object"
+                                name="action_view_journey_map"
+                                icon="fa-map-marker"
+                                invisible="vehicle_id == False"
+                                help="View route map for the dispatched vehicle (filtered view)">
+                            <span class="o_stat_text">Route</span>
+                        </button>
+                    </div>
+
+                    <!-- Booking Code Header -->
+                    <div class="oe_title">
+                        <h1>
+                            <span invisible="name not in ['New', 'Unnamed']" class="text-muted">
+                                Generating booking code...
+                            </span>
+                            <field name="name" readonly="1" invisible="name in ['New', 'Unnamed']"/>
+                        </h1>
+                    </div>
+
+                    <!-- Group 1: Work Information -->
+                    <group string="Work Information" invisible="service_category != 'work'">
+                        <group>
+                            <field name="service_category" invisible="1"/>
+                            <field name="work_departure_location" widget="address_autocomplete"
+                                   placeholder="Enter departure address (at least 3 characters)..."/>
+                            <field name="work_location" widget="address_autocomplete"
+                                   placeholder="Enter destination address (at least 3 characters)..."/>
+                            <field name="work_purpose" widget="text"/>
+                            <field name="work_date_start" widget="datetime"/>
+                            <field name="work_date_end" widget="datetime"/>
+                        </group>
+                        <group>
+                            <field name="team_id"/>
+                            <field name="user_ids" widget="many2many_tags"/>
+                        </group>
+                    </group>
+
+                    <!-- Combined Group 2+3: Booking & Approval Information (side-by-side) -->
+                    <group>
+                        <group string="Booking Information">
+                            <field name="submitted_by" string="Requester" readonly="1"/>
+                            <field name="submission_date" string="Booking Date" readonly="1"/>
+                        </group>
+                        <group string="Approval Information" invisible="state == 'new'">
+                            <field name="manager_id" string="Approver"
+                                   readonly="1"/>
+                            <field name="manager_approval_date" string="Approval Date"
+                                   widget="date" readonly="1" invisible="not manager_approval_date"/>
+                        </group>
+                    </group>
+
+                    <!-- Group 4: Dispatch Information (Visible to all, editable by Sale Admin & Base Admin) -->
+                    <group string="Dispatch Information"
+                           invisible="state not in ['pending_dispatch', 'running', 'done', 'cancelled']">
+                        <group>
+                            <field name="vehicle_id" options="{'no_create': True}"
+                                   required="state in ['running', 'done']"/>
+                            <field name="driver_id" options="{'no_create': True}"
+                                   required="state in ['running', 'done']"/>
+                            <field name="date" string="Departure Date"
+                                   required="state in ['running', 'done']"/>
+                            <field name="date_arrival" string="Arrival Date"
+                                   required="state in ['running', 'done']"/>
+                        </group>
+                        <group>
+                            <field name="dispatched_by" readonly="1" invisible="not dispatched_by"/>
+                            <field name="admin_approval_date" readonly="1" invisible="not admin_approval_date"/>
+                        </group>
+                    </group>
+
+                    <!-- Group 5: Rejection Information (Optimized layout) -->
+                    <group string="Rejection Information" invisible="state != 'cancelled'">
+                        <field name="rejection_reason" widget="text" readonly="1"/>
+                        <field name="rejected_by" readonly="1"/>
+                        <field name="rejection_date" readonly="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Search View - Standalone (No Inheritance) -->
+    <record id="view_fleet_vehicle_log_services_search_v2" model="ir.ui.view">
+        <field name="name">fleet.vehicle.log.services.search.v2</field>
+        <field name="model">fleet.vehicle.log.services</field>
+        <field name="priority">1</field>
+        <field name="arch" type="xml">
+            <search string="Search Booking Requests">
+                <!-- Search fields -->
+                <field name="name" string="Booking Code" filter_domain="[('name','ilike',self)]"/>
+                <field name="work_location" string="Destination" filter_domain="[('work_location','ilike',self)]"/>
+                <field name="work_departure_location" string="Departure Location" filter_domain="[('work_departure_location','ilike',self)]"/>
+                <field name="team_id" string="Team"/>
+                <field name="vehicle_id" string="Vehicle"/>
+                <field name="driver_id" string="Driver"/>
+
+                <!-- Filters by category -->
+                <filter string="Work" name="work" domain="[('service_category','=','work')]"/>
+
+                <separator/>
+
+                <!-- Filters by state -->
+                <filter string="All Activities" name="active_services"
+                        domain="[('state', 'in', ['new', 'pending_manager', 'pending_dispatch', 'running'])]"/>
+                <filter string="New" name="new" domain="[('state','=','new')]"/>
+                <filter string="Pending Approval" name="pending_manager" domain="[('state','=','pending_manager')]"/>
+                <filter string="Awaiting Dispatch" name="pending_dispatch" domain="[('state','=','pending_dispatch')]"/>
+                <filter string="Running" name="running" domain="[('state','=','running')]"/>
+                <filter string="Completed" name="done" domain="[('state','=','done')]"/>
+                <filter string="Cancelled" name="cancelled" domain="[('state','=','cancelled')]"/>
+
+                <separator/>
+
+                <!-- Group by -->
+                <group expand="0" string="Group By">
+                    <filter string="Service Type" name="group_category" context="{'group_by':'service_category'}"/>
+                    <filter string="Status" name="group_state" context="{'group_by':'state'}"/>
+                    <filter string="Team" name="group_team" context="{'group_by':'team_id'}"/>
+                    <filter string="Vehicle" name="group_vehicle" context="{'group_by':'vehicle_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+</odoo>

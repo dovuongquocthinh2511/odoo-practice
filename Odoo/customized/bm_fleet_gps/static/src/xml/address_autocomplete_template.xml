@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="bm_fleet_gps.AddressAutocompleteField" t-inherit="web.CharField" t-inherit-mode="primary">
+        <xpath expr="//input" position="replace">
+            <div class="o_field_address_autocomplete position-relative">
+                <input
+                    type="text"
+                    class="o_input"
+                    t-ref="input"
+                    t-att-value="props.record.data[props.name] or ''"
+                    t-att-placeholder="props.placeholder"
+                    t-att-readonly="props.readonly ? 'readonly' : undefined"
+                    autocomplete="off"
+                />
+                <div class="address-autocomplete-dropdown" t-ref="dropdown"></div>
+            </div>
+        </xpath>
+    </t>
+
+</templates>

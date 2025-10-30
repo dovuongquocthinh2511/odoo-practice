@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Transportation Journey List View -->
+    <record id="fleet_transportation_journey_view_list" model="ir.ui.view">
+        <field name="name">bm.fleet.transportation.journey.list</field>
+        <field name="model">bm.fleet.transportation.journey</field>
+        <field name="arch" type="xml">
+            <list string="GPS Points" default_order="timestamp desc">
+                <field name="vehicle_id"/>
+                <field name="timestamp" string="GPS Time"/>
+                <field name="distance" string="Distance (km)" widget="float" digits="[16,2]"/>
+                <field name="speed" string="Speed (km/h)"/>
+                <field name="machine_status" string="Engine"/>
+                <field name="longitude" string="Longitude" optional="hide"/>
+                <field name="latitude" string="Latitude" optional="hide"/>
+                <field name="address" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Transportation Journey Form View -->
+    <record id="fleet_transportation_journey_view_form" model="ir.ui.view">
+        <field name="name">bm.fleet.transportation.journey.form</field>
+        <field name="model">bm.fleet.transportation.journey</field>
+        <field name="arch" type="xml">
+            <form string="Transportation Journey">
+                <header>
+                    <button name="action_refresh_address"
+                            string="Update Address"
+                            type="object"
+                            class="btn-primary"
+                            invisible="latitude == 0"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="display_name" readonly="1"/>
+                        </h1>
+                    </div>
+
+                    <group>
+                        <group string="GPS Information">
+                            <field name="vehicle_id"/>
+                            <field name="timestamp" string="Sync Time"/>
+                            <field name="distance" string="Distance (km)" widget="float"/>
+                            <field name="speed" string="Speed (km/h)"/>
+                            <field name="machine_status" string="Engine"/>
+                            <field name="gps_status" string="GPS Active"/>
+                        </group>
+                    </group>
+
+                    <group string="Position">
+                        <group>
+                            <field name="latitude"/>
+                            <field name="longitude"/>
+                        </group>
+                        <group>
+                            <field name="address" colspan="2"/>
+                        </group>
+                    </group>
+
+                    <!-- API Sync Info - Hidden from normal users, only visible to technical users -->
+                    <group string="Sync Information (Technical)" invisible="1" groups="base.group_no_one">
+                        <field name="timestamp" readonly="1"/>
+                        <field name="api_data" readonly="1" widget="ace" options="{'mode': 'json'}"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Transportation Journey Search View -->
+    <record id="fleet_transportation_journey_view_search" model="ir.ui.view">
+        <field name="name">bm.fleet.transportation.journey.search</field>
+        <field name="model">bm.fleet.transportation.journey</field>
+        <field name="arch" type="xml">
+            <search string="Search GPS Points">
+                <field name="vehicle_id"/>
+                <field name="address"/>
+                <field name="distance"/>
+
+                <!-- Time Filters -->
+                <filter string="Today" name="today"
+                        domain="[('timestamp', '>=', (datetime.datetime.combine(context_today(), datetime.time(0,0,0)))),
+                                 ('timestamp', '&lt;=', (datetime.datetime.combine(context_today(), datetime.time(23,59,59))))]"/>
+                <filter string="Last 7 Days" name="last_week"
+                        domain="[('timestamp', '>=', (context_today() - relativedelta(days=7)))]"/>
+                <filter string="This Month" name="this_month"
+                        domain="[('timestamp', '>=', (context_today() - relativedelta(day=1)))]"/>
+
+                <separator/>
+
+                <!-- Status Filters -->
+                <filter string="Engine On" name="engine_on"
+                        domain="[('machine_status', '=', True)]"/>
+                <filter string="Engine Off" name="engine_off"
+                        domain="[('machine_status', '=', False)]"/>
+
+                <separator/>
+
+                <!-- Distance Filters -->
+                <filter string="Has Movement (>0 km)" name="has_distance"
+                        domain="[('distance', '>', 0)]"/>
+
+                <separator/>
+
+                <group expand="0" string="Group By">
+                    <filter string="Vehicle" name="group_vehicle"
+                            context="{'group_by': 'vehicle_id'}"/>
+                    <filter string="Day" name="group_date"
+                            context="{'group_by': 'timestamp:day'}"/>
+                    <filter string="Month" name="group_month"
+                            context="{'group_by': 'timestamp:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Transportation Journey Action -->
+    <record id="fleet_transportation_journey_action" model="ir.actions.act_window">
+        <field name="name">Transportation Journey</field>
+        <field name="res_model">bm.fleet.transportation.journey</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'search_default_last_week': 1}</field>
+        <field name="limit">80</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No journeys have been recorded yet
+            </p>
+            <p>
+                Transportation journeys will be automatically synced from ADSUN GPS system.
+            </p>
+        </field>
+    </record>
+
+    <!-- Add menu item to Fleet - HIDDEN -->
+    <!-- Uncomment to show menu:
+    <menuitem id="menu_fleet_transportation_journey"
+              name="Transportation Journey"
+              parent="fleet.menu_root"
+              action="fleet_transportation_journey_action"
+              sequence="46"/>
+    -->
+
+</odoo>

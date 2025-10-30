@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Custom Category for BM Fleet GPS Module -->
+        <!-- 3 permission groups: Employee, Manager, Sale Admin -->
+        <!-- Odoo Base Admin (base.group_system) has full access automatically -->
+        <record id="module_category_bm_fleet_gps" model="ir.module.category">
+            <field name="name">BM Fleet</field>
+            <field name="description">Hệ thống đăng ký và quản lý đặt xe</field>
+            <field name="sequence">30</field>
+        </record>
+
+        <!-- User Group (Base Level - combines Employee + Manager) -->
+        <record id="group_bm_fleet_user" model="res.groups">
+            <field name="name">Người dùng</field>
+            <field name="category_id" ref="module_category_bm_fleet_gps"/>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+            <field name="comment">
+                Người dùng có quyền:
+                - Tạo đơn đặt xe mới
+                - Xem đơn đặt xe của bản thân (created, assigned, hoặc managed)
+                - Chỉnh sửa đơn đặt xe liên quan
+                - Phê duyệt đơn đặt xe khi là manager
+                - Reset đơn đặt xe bị hủy
+                - Chỉ truy cập menu Đặt xe (KHÔNG thấy menu Vehicles)
+
+                Note: KHÔNG include fleet.fleet_group_user để ẩn menu Vehicles
+                      Quyền truy cập fleet.vehicle và fleet.vehicle.log.services
+                      được cấp trực tiếp qua ir.model.access.csv và record rules
+                      Menu Vehicles bị ẩn qua override trong views/menus.xml
+            </field>
+        </record>
+
+        <!-- Sale Admin Group (Dispatch Only) -->
+        <record id="group_bm_fleet_sale_admin" model="res.groups">
+            <field name="name">Sale Admin</field>
+            <field name="category_id" ref="module_category_bm_fleet_gps"/>
+            <field name="implied_ids" eval="[(4, ref('group_bm_fleet_user'))]"/>
+            <field name="comment">
+                Sale Admin có quyền:
+                - Tất cả quyền của Người dùng
+                - Xem đơn đặt xe đã dispatch bởi họ
+                - Điều xe (phân công xe và tài xế)
+                - Từ chối điều xe
+                - Hoàn thành đơn đặt xe
+                - Chỉnh sửa thông tin điều xe
+                - KHÔNG có quyền phê duyệt Manager
+                - KHÔNG có quyền xóa đơn đặt xe
+            </field>
+        </record>
+
+    </data>
+</odoo>

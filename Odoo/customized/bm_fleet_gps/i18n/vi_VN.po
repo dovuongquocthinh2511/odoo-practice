@@ -1,0 +1,2629 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* bm_fleet_gps
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0+e-20251021\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-10-27 03:41+0000\n"
+"PO-Revision-Date: 2025-10-27 03:41+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: bm_fleet_gps
+#: model:res.groups,comment:bm_fleet_gps.group_bm_fleet_user
+msgid ""
+"\n"
+"                Người dùng có quyền:\n"
+"                - Tạo đơn đặt xe mới\n"
+"                - Xem đơn đặt xe của bản thân (created, assigned, hoặc managed)\n"
+"                - Chỉnh sửa đơn đặt xe liên quan\n"
+"                - Phê duyệt đơn đặt xe khi là manager\n"
+"                - Reset đơn đặt xe bị hủy\n"
+"                - Chỉ truy cập menu Đặt xe (KHÔNG thấy menu Vehicles)\n"
+"\n"
+"                Note: KHÔNG include fleet.fleet_group_user để ẩn menu Vehicles\n"
+"                      Quyền truy cập fleet.vehicle và fleet.vehicle.log.services\n"
+"                      được cấp trực tiếp qua ir.model.access.csv và record rules\n"
+"                      Menu Vehicles bị ẩn qua override trong views/menus.xml\n"
+"            "
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:res.groups,comment:bm_fleet_gps.group_bm_fleet_sale_admin
+msgid ""
+"\n"
+"                Sale Admin có quyền:\n"
+"                - Tất cả quyền của Người dùng\n"
+"                - Xem đơn đặt xe đã dispatch bởi họ\n"
+"                - Điều xe (phân công xe và tài xế)\n"
+"                - Từ chối điều xe\n"
+"                - Hoàn thành đơn đặt xe\n"
+"                - Chỉnh sửa thông tin điều xe\n"
+"                - KHÔNG có quyền phê duyệt Manager\n"
+"                - KHÔNG có quyền xóa đơn đặt xe\n"
+"            "
+msgstr ""
+
+#. module: bm_fleet_gps
+#. odoo-javascript
+#: code:addons/bm_fleet_gps/static/src/xml/journey_map_template.xml:0
+msgid "(màu xanh dương)"
+msgstr "(màu xanh dương)"
+
+#. module: bm_fleet_gps
+#. odoo-javascript
+#: code:addons/bm_fleet_gps/static/src/xml/journey_map_template.xml:0
+msgid "(màu xanh lá)"
+msgstr "(màu xanh lá)"
+
+#. module: bm_fleet_gps
+#. odoo-javascript
+#: code:addons/bm_fleet_gps/static/src/xml/journey_map_template.xml:0
+msgid "(màu xám nhạt)"
+msgstr "(màu xám nhạt)"
+
+#. module: bm_fleet_gps
+#. odoo-javascript
+#: code:addons/bm_fleet_gps/static/src/xml/journey_map_template.xml:0
+msgid "0.5x"
+msgstr "0.5x"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.res_config_settings_view_form
+msgid "1136"
+msgstr ""
+
+#. module: bm_fleet_gps
+#. odoo-javascript
+#: code:addons/bm_fleet_gps/static/src/xml/journey_map_template.xml:0
+msgid "1x"
+msgstr "1x"
+
+#. module: bm_fleet_gps
+#. odoo-javascript
+#: code:addons/bm_fleet_gps/static/src/xml/journey_map_template.xml:0
+msgid "2x"
+msgstr "2x"
+
+#. module: bm_fleet_gps
+#. odoo-javascript
+#: code:addons/bm_fleet_gps/static/src/xml/journey_map_template.xml:0
+msgid "5x"
+msgstr "5x"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.fleet_vehicle_view_kanban_gps
+msgid "<i class=\"fa fa-circle\" style=\"color: #00ff00;\"/> In Use"
+msgstr "<i class=\"fa fa-circle\" style=\"color: #00ff00;\"/> Đang sử dụng"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.fleet_vehicle_view_kanban_gps
+msgid "<i class=\"fa fa-circle\" style=\"color: #ffa500;\"/> Parked"
+msgstr "<i class=\"fa fa-circle\" style=\"color: #ffa500;\"/> Đỗ xe"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.fleet_vehicle_view_kanban_gps
+msgid "<i class=\"fa fa-circle-o\"/> GPS Offline"
+msgstr "<i class=\"fa fa-circle-o\"/> GPS ngoại tuyến"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.res_config_settings_view_form
+msgid ""
+"<i class=\"fa fa-info-circle\"/>\n"
+"                                        Violation data will be cached for the specified duration to reduce API calls.\n"
+"                                        Set to 0 to disable caching (not recommended)."
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.fleet_vehicle_view_kanban_gps
+msgid "<i class=\"fa fa-map-marker text-primary\" title=\"GPS Address\"/>"
+msgstr "<i class=\"fa fa-map-marker text-primary\" title=\"Địa chỉ GPS\"/>"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.fleet_vehicle_view_kanban_gps
+msgid "<i class=\"fa fa-map-marker\" title=\"Location\"/>"
+msgstr "<i class=\"fa fa-map-marker\" title=\"Vị trí\"/>"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.res_config_settings_view_form
+msgid "<span class=\"o_form_label ms-2\">addresses per run</span>"
+msgstr "<span class=\"o_form_label ms-2\">địa chỉ mỗi lần chạy</span>"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.res_config_settings_view_form
+msgid "<span class=\"o_form_label ms-2\">days</span>"
+msgstr "<span class=\"o_form_label ms-2\">ngày</span>"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.res_config_settings_view_form
+msgid "<span class=\"o_form_label ms-2\">hours</span>"
+msgstr "<span class=\"o_form_label ms-2\">giờ</span>"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.res_config_settings_view_form
+msgid "<span class=\"o_form_label ms-2\">records per batch</span>"
+msgstr "<span class=\"o_form_label ms-2\">bản ghi mỗi lô</span>"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.res_config_settings_view_form
+msgid "<span class=\"o_form_label ms-2\">vehicles per batch</span>"
+msgstr "<span class=\"o_form_label ms-2\">phương tiện mỗi lô</span>"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.view_fleet_vehicle_log_services_form_v2
+msgid "<span class=\"o_stat_text\">Route</span>"
+msgstr "<span class=\"o_stat_text\">Lộ trình</span>"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.view_fleet_vehicle_log_services_form_v2
+msgid ""
+"<span invisible=\"name not in ['New', 'Unnamed']\" class=\"text-muted\">\n"
+"                                Generating booking code...\n"
+"                            </span>"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model,name:bm_fleet_gps.model_bm_fleet_adsun_token
+msgid "ADSUN API Token Helper"
+msgstr "Hỗ trợ mã token API ADSUN"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_fleet_vehicle__adsun_device_serial_number
+msgid "ADSUN Device Serial Number"
+msgstr "Số serial thiết bị ADSUN"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.res_config_settings_view_form
+msgid "ADSUN GPS API"
+msgstr "API GPS ADSUN"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,help:bm_fleet_gps.field_fleet_vehicle__adsun_device_serial_number
+msgid "ADSUN GPS device serial number for API calls"
+msgstr "Số serial thiết bị GPS ADSUN cho các cuộc gọi API"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,help:bm_fleet_gps.field_fleet_vehicle__gps_company_id
+msgid "ADSUN company ID"
+msgstr "Mã công ty ADSUN"
+
+#. module: bm_fleet_gps
+#: model:ir.model,name:bm_fleet_gps.model_bm_fleet_api_config_mixin
+msgid "API Configuration Helper Mixin"
+msgstr "Hỗ trợ cấu hình API"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_transportation_journey__api_data
+msgid "API Data"
+msgstr "Dữ liệu API"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.res_config_settings_view_form
+msgid "API Password"
+msgstr "Mật khẩu API"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.res_config_settings_view_form
+msgid "API URL"
+msgstr "Đường dẫn API"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.res_config_settings_view_form
+msgid "API Username"
+msgstr "Tên đăng nhập API"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_request_user__message_needaction
+msgid "Action Needed"
+msgstr "Cần hành động"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_request_user__active
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_team__active
+msgid "Active"
+msgstr "Hoạt động"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_request_user__activity_ids
+msgid "Activities"
+msgstr "Hoạt động"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_request_user__activity_exception_decoration
+msgid "Activity Exception Decoration"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_request_user__activity_state
+msgid "Activity State"
+msgstr "Trạng thái hoạt động"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_request_user__activity_type_icon
+msgid "Activity Type Icon"
+msgstr "Biểu tượng loại hoạt động"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,help:bm_fleet_gps.field_bm_fleet_request_user__notes
+msgid "Additional notes about this user profile"
+msgstr "Ghi chú bổ sung về hồ sơ người dùng này"
+
+#. module: bm_fleet_gps
+#. odoo-python
+#: code:addons/bm_fleet_gps/models/bm_fleet_transportation_journey.py:0
+msgid "Address has been updated from geocode service."
+msgstr "Địa chỉ đã được cập nhật từ dịch vụ mã hóa địa lý."
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,help:bm_fleet_gps.field_bm_fleet_transportation_journey__address
+msgid "Address retrieved from geocode API"
+msgstr "Địa chỉ lấy từ API mã hóa địa lý"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.view_fleet_vehicle_log_services_search_v2
+msgid "All Activities"
+msgstr "Tất cả hoạt động"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.view_fleet_vehicle_log_services_form_v2
+msgid "Approval Date"
+msgstr "Ngày phê duyệt"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.view_fleet_vehicle_log_services_form_v2
+msgid "Approval Information"
+msgstr "Thông tin phê duyệt"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.view_fleet_vehicle_log_services_form_v2
+msgid "Approve"
+msgstr "Phê duyệt"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.view_fleet_vehicle_log_services_form_v2
+msgid "Approver"
+msgstr "Người phê duyệt"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.view_fleet_vehicle_log_services_form_v2
+msgid "Arrival Date"
+msgstr "Ngày đến"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_request_user__message_attachment_count
+msgid "Attachment Count"
+msgstr "Số lượng tệp đính kèm"
+
+#. module: bm_fleet_gps
+#. odoo-python
+#: code:addons/bm_fleet_gps/models/bm_fleet_vehicle.py:0
+msgid "Authentication failed: %s"
+msgstr "Xác thực thất bại: %s"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.res_config_settings_view_form
+msgid ""
+"Automatically check traffic violations via iphatnguoi.com API when license "
+"plate is entered"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.res_config_settings_view_form
+msgid ""
+"Automatically delete old GPS journey data to optimize database performance"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.view_fleet_vehicle_log_services_search_v2
+msgid "Awaiting Dispatch"
+msgstr "Chờ điều xe"
+
+#. module: bm_fleet_gps
+#: model:ir.module.category,name:bm_fleet_gps.module_category_bm_fleet_gps
+msgid "BM Fleet"
+msgstr "Đội xe BM"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,help:bm_fleet_gps.field_res_config_settings__gps_api_url
+msgid "Base URL for ADSUN GPS API (e.g., https://systemroute.adsun.vn/api)"
+msgstr "URL cơ sở cho API GPS ADSUN (ví dụ: https://systemroute.adsun.vn/api)"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,help:bm_fleet_gps.field_res_config_settings__violation_api_url
+msgid "Base URL for traffic violation check API (iphatnguoi.com)"
+msgstr "URL cơ sở cho API kiểm tra vi phạm giao thông (iphatnguoi.com)"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.res_config_settings_view_form
+msgid "Batch Processing"
+msgstr "Xử lý theo lô"
+
+#. module: bm_fleet_gps
+#: model:ir.actions.act_window,name:bm_fleet_gps.fleet_vehicle_services_user_action
+#: model:ir.ui.menu,name:bm_fleet_gps.menu_fleet_vehicle_services
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.fleet_vehicle_view_form_gps
+msgid "Booking"
+msgstr "Đặt xe"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.view_fleet_vehicle_log_services_search_v2
+msgid "Booking Code"
+msgstr "Mã đặt xe"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.view_fleet_vehicle_log_services_form_v2
+msgid "Booking Date"
+msgstr "Ngày đặt xe"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.view_fleet_vehicle_log_services_form_v2
+msgid "Booking Information"
+msgstr "Thông tin đặt xe"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.view_fleet_vehicle_log_services_form_v2
+msgid "Booking Request"
+msgstr "Yêu cầu đặt xe"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_fleet_vehicle__branch_id
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.fleet_vehicle_view_search_gps
+msgid "Branch"
+msgstr "Chi nhánh"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,help:bm_fleet_gps.field_fleet_vehicle__branch_id
+msgid "Branch this vehicle belongs to"
+msgstr "Chi nhánh mà phương tiện này thuộc về"
+
+#. module: bm_fleet_gps
+#. odoo-python
+#: code:addons/bm_fleet_gps/models/bm_fleet_vehicle_log_services.py:0
+msgid "Bạn chỉ được phép reset đơn đặt xe do bạn tạo"
+msgstr ""
+
+#. module: bm_fleet_gps
+#. odoo-python
+#: code:addons/bm_fleet_gps/models/bm_fleet_vehicle_log_services.py:0
+msgid "Bạn không có quyền phê duyệt"
+msgstr ""
+
+#. module: bm_fleet_gps
+#. odoo-python
+#: code:addons/bm_fleet_gps/models/bm_fleet_vehicle_log_services.py:0
+msgid "Bạn không có quyền thay đổi thông tin điều xe"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,help:bm_fleet_gps.field_bm_fleet_address_history__active
+msgid "Bỏ chọn để ẩn địa chỉ khỏi gợi ý"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.res_config_settings_view_form
+msgid "Cache Duration (hours)"
+msgstr "Thời gian lưu cache (giờ)"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,help:bm_fleet_gps.field_bm_fleet_service_booking_wizard__manager_user_request_id
+msgid "Cached request user profile for the manager"
+msgstr "Hồ sơ người dùng yêu cầu được lưu cache cho quản lý"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,help:bm_fleet_gps.field_bm_fleet_service_booking_wizard__requester_user_request_id
+msgid "Cached request user profile for the requester"
+msgstr "Hồ sơ người dùng yêu cầu được lưu cache cho người yêu cầu"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.view_fleet_service_booking_wizard_form
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.view_fleet_service_rejection_wizard_form
+msgid "Cancel"
+msgstr "Hủy"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.view_fleet_vehicle_log_services_search_v2
+msgid "Cancelled"
+msgstr "Đã hủy"
+
+#. module: bm_fleet_gps
+#. odoo-python
+#: code:addons/bm_fleet_gps/models/bm_fleet_vehicle.py:0
+msgid "Cannot connect to violation API. Check network."
+msgstr ""
+
+#. module: bm_fleet_gps
+#. odoo-python
+#: code:addons/bm_fleet_gps/utils/validation_helper.py:0
+msgid "Cannot perform action: record must be in \"%s\" state"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.fleet_vehicle_view_form_gps
+msgid "Check Violations"
+msgstr "Kiểm tra vi phạm"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.fleet_vehicle_view_form_gps
+msgid "Check traffic violations via iphatnguoi.com API"
+msgstr "Kiểm tra vi phạm giao thông qua API iphatnguoi.com"
+
+#. module: bm_fleet_gps
+#. odoo-javascript
+#: code:addons/bm_fleet_gps/static/src/xml/journey_map_template.xml:0
+msgid "Chú thích màu sắc"
+msgstr ""
+
+#. module: bm_fleet_gps
+#. odoo-python
+#: code:addons/bm_fleet_gps/models/bm_fleet_vehicle_log_services.py:0
+msgid "Chưa có xe được điều cho đơn đặt xe này"
+msgstr ""
+
+#. module: bm_fleet_gps
+#. odoo-python
+#: code:addons/bm_fleet_gps/models/bm_fleet_vehicle_log_services.py:0
+msgid "Chỉ có thể từ chối khi ở trạng thái %s"
+msgstr ""
+
+#. module: bm_fleet_gps
+#. odoo-javascript
+#: code:addons/bm_fleet_gps/static/src/xml/journey_map_template.xml:0
+msgid "Chọn xe trước, sau đó chọn khoảng thời gian để lọc waypoints"
+msgstr ""
+
+#. module: bm_fleet_gps
+#. odoo-javascript
+#: code:addons/bm_fleet_gps/static/src/xml/journey_map_template.xml:0
+msgid "Chọn xe từ danh sách bên trái, sau đó nhấn nút"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model_terms:ir.actions.act_window,help:bm_fleet_gps.fleet_vehicle_services_user_action
+msgid "Click \"Vehicle Booking Registration\" button to create new request"
+msgstr ""
+
+#. module: bm_fleet_gps
+#. odoo-python
+#: code:addons/bm_fleet_gps/models/bm_fleet_team.py:0
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_team__company_id
+msgid "Company"
+msgstr "Công ty"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.res_config_settings_view_form
+msgid "Company ID"
+msgstr "Mã công ty"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.view_fleet_vehicle_log_services_form_v2
+msgid "Complete"
+msgstr "Hoàn thành"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.view_fleet_vehicle_log_services_search_v2
+msgid "Completed"
+msgstr "Đã hoàn thành"
+
+#. module: bm_fleet_gps
+#: model:ir.model,name:bm_fleet_gps.model_res_config_settings
+msgid "Config Settings"
+msgstr "Cài đặt cấu hình"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.res_config_settings_view_form
+msgid "Configure batch sizes for better performance during sync and cleanup"
+msgstr "Cấu hình kích thước lô để tối ưu hiệu suất đồng bộ và dọn dẹp"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.res_config_settings_view_form
+msgid "Configure connection to ADSUN GPS tracking platform"
+msgstr "Cấu hình kết nối đến nền tảng theo dõi GPS ADSUN"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.res_config_settings_view_form
+msgid "Configure violation checking API settings"
+msgstr "Cấu hình thiết lập API kiểm tra vi phạm"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.view_fleet_service_rejection_wizard_form
+msgid "Confirm Rejection"
+msgstr "Xác nhận từ chối"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.actions.act_window,help:bm_fleet_gps.action_fleet_team
+msgid "Create your first team"
+msgstr "Tạo đội nhóm đầu tiên của bạn"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_address_history__create_uid
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_request_user__create_uid
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_service_booking_wizard__create_uid
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_service_rejection_wizard__create_uid
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_team__create_uid
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_transportation_journey__create_uid
+msgid "Created by"
+msgstr "Tạo bởi"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_address_history__create_date
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_request_user__create_date
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_service_booking_wizard__create_date
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_service_rejection_wizard__create_date
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_team__create_date
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_transportation_journey__create_date
+msgid "Created on"
+msgstr "Tạo lúc"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_fleet_vehicle__current_address
+msgid "Current Address"
+msgstr "Địa chỉ hiện tại"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,help:bm_fleet_gps.field_fleet_vehicle__current_latitude
+msgid "Current GPS latitude from latest waypoint"
+msgstr "Vĩ độ GPS hiện tại từ điểm đường mới nhất"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,help:bm_fleet_gps.field_fleet_vehicle__current_longitude
+msgid "Current GPS longitude from latest waypoint"
+msgstr "Kinh độ GPS hiện tại từ điểm đường mới nhất"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_fleet_vehicle__current_latitude
+msgid "Current Latitude"
+msgstr "Vĩ độ hiện tại"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_fleet_vehicle__current_longitude
+msgid "Current Longitude"
+msgstr "Kinh độ hiện tại"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.fleet_vehicle_view_form_gps
+msgid "Current Status"
+msgstr "Trạng thái hiện tại"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,help:bm_fleet_gps.field_bm_fleet_service_booking_wizard__user_ids
+msgid "Các thành viên đi cùng (không bắt buộc phải bao gồm người yêu cầu)"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields.selection,name:bm_fleet_gps.selection__fleet_vehicle__violation_status__pending
+msgid "Có vi phạm chưa xử lý"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_address_history__company_id
+msgid "Công ty"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,help:bm_fleet_gps.field_bm_fleet_address_history__company_id
+msgid "Công ty sử dụng địa chỉ này"
+msgstr ""
+
+#. module: bm_fleet_gps
+#. odoo-javascript
+#: code:addons/bm_fleet_gps/static/src/xml/journey_map_template.xml:0
+msgid "Danh sách xe"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.res_config_settings_view_form
+msgid "Data Management"
+msgstr "Quản lý dữ liệu"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_res_config_settings__gps_retention_days
+msgid "Data Retention (days)"
+msgstr "Lưu trữ dữ liệu (ngày)"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.fleet_transportation_journey_view_search
+msgid "Day"
+msgstr "Ngày"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_res_config_settings__gps_default_company_id
+msgid "Default GPS Company ID"
+msgstr "Mã công ty GPS mặc định"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,help:bm_fleet_gps.field_res_config_settings__gps_default_company_id
+msgid "Default company ID for GPS API requests"
+msgstr "Mã công ty mặc định cho yêu cầu API GPS"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_res_config_settings__gps_delete_batch_size
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.res_config_settings_view_form
+msgid "Delete Batch Size"
+msgstr "Kích thước lô xóa"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.view_fleet_vehicle_log_services_form_v2
+msgid "Departure Date"
+msgstr "Ngày khởi hành"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.view_fleet_vehicle_log_services_search_v2
+msgid "Departure Location"
+msgstr "Địa điểm xuất phát"
+
+#. module: bm_fleet_gps
+#. odoo-python
+#: code:addons/bm_fleet_gps/models/bm_fleet_team.py:0
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_team__description
+msgid "Description"
+msgstr "Mô tả"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.view_fleet_vehicle_log_services_search_v2
+msgid "Destination"
+msgstr "Địa điểm đến"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.view_fleet_vehicle_log_services_form_v2
+msgid "Dispatch Information"
+msgstr "Thông tin điều xe"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.view_fleet_vehicle_log_services_form_v2
+msgid "Dispatch Vehicle"
+msgstr "Điều xe"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_address_history__display_name
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_request_user__display_name
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_service_booking_wizard__display_name
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_service_rejection_wizard__display_name
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_team__display_name
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_transportation_journey__display_name
+msgid "Display Name"
+msgstr "Tên hiển thị"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.fleet_transportation_journey_view_form
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.fleet_transportation_journey_view_list
+msgid "Distance (km)"
+msgstr "Khoảng cách (km)"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,help:bm_fleet_gps.field_bm_fleet_transportation_journey__distance
+msgid ""
+"Distance traveled between this waypoint and previous waypoint (calculated "
+"as: current TotalDistance - previous TotalDistance)"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,help:bm_fleet_gps.field_bm_fleet_transportation_journey__driver_id
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.view_fleet_vehicle_log_services_search_v2
+msgid "Driver"
+msgstr "Tài xế"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.fleet_vehicle_view_form_gps
+msgid "Driver History"
+msgstr "Lịch sử lái xe"
+
+#. module: bm_fleet_gps
+#. odoo-python
+#: code:addons/bm_fleet_gps/models/bm_fleet_transportation_journey.py:0
+#: model:ir.model.constraint,message:bm_fleet_gps.constraint_bm_fleet_transportation_journey_unique_vehicle_timestamp
+msgid "Duplicate waypoint detected for same vehicle and timestamp!"
+msgstr "Phát hiện điểm đường trùng lặp cho cùng phương tiện và dấu thời gian!"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_fleet_vehicle_log_services__service_category
+msgid "Dịch vụ"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields.selection,name:bm_fleet_gps.selection__bm_fleet_service_booking_wizard__service_category__work
+#: model:ir.model.fields.selection,name:bm_fleet_gps.selection__fleet_vehicle_log_services__service_category__work
+msgid "Dịch vụ công tác"
+msgstr ""
+
+#. module: bm_fleet_gps
+#. odoo-javascript
+#: code:addons/bm_fleet_gps/static/src/xml/journey_map_template.xml:0
+msgid "Dừng"
+msgstr ""
+
+#. module: bm_fleet_gps
+#. odoo-python
+#: code:addons/bm_fleet_gps/models/bm_fleet_request_user.py:0
+#: model:ir.model.constraint,message:bm_fleet_gps.constraint_bm_fleet_request_user_user_unique
+msgid "Each user can only have one booking profile!"
+msgstr "Mỗi người dùng chỉ có thể có một hồ sơ đặt xe!"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,help:bm_fleet_gps.field_res_config_settings__gps_ssl_verify
+msgid "Enable SSL certificate verification for GPS API requests"
+msgstr "Bật xác minh chứng chỉ SSL cho yêu cầu API GPS"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_res_config_settings__violation_check_enabled
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.res_config_settings_view_form
+msgid "Enable Violation Checking"
+msgstr "Bật kiểm tra vi phạm"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,help:bm_fleet_gps.field_res_config_settings__violation_check_enabled
+msgid "Enable automatic traffic violation checking via iphatnguoi.com API"
+msgstr "Bật kiểm tra vi phạm giao thông tự động qua API iphatnguoi.com"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.fleet_transportation_journey_view_form
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.fleet_transportation_journey_view_list
+msgid "Engine"
+msgstr "Động cơ"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.fleet_transportation_journey_view_search
+msgid "Engine Off"
+msgstr "Động cơ tắt"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.fleet_transportation_journey_view_search
+msgid "Engine On"
+msgstr "Động cơ bật"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,help:bm_fleet_gps.field_bm_fleet_transportation_journey__machine_status
+msgid "Engine on/off status"
+msgstr "Trạng thái bật/tắt động cơ"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.view_fleet_service_booking_wizard_form
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.view_fleet_vehicle_log_services_form_v2
+msgid "Enter departure address (at least 3 characters)..."
+msgstr "Nhập địa chỉ khởi hành (ít nhất 3 ký tự)..."
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.view_fleet_service_booking_wizard_form
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.view_fleet_vehicle_log_services_form_v2
+msgid "Enter destination address (at least 3 characters)..."
+msgstr "Nhập địa chỉ đích (ít nhất 3 ký tự)..."
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.view_fleet_service_rejection_wizard_form
+msgid "Enter reason for rejecting this booking..."
+msgstr "Nhập lý do từ chối đặt xe này..."
+
+#. module: bm_fleet_gps
+#. odoo-python
+#: code:addons/bm_fleet_gps/models/bm_fleet_vehicle.py:0
+msgid "Failed to check violations: %s"
+msgstr ""
+
+#. module: bm_fleet_gps
+#. odoo-python
+#: code:addons/bm_fleet_gps/models/bm_fleet_vehicle.py:0
+msgid "Failed to connect to GPS API: %s"
+msgstr ""
+
+#. module: bm_fleet_gps
+#. odoo-python
+#: code:addons/bm_fleet_gps/models/bm_fleet_vehicle.py:0
+msgid "Failed to sync GPS data. Check logs for details."
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.res_config_settings_view_form
+msgid "Fleet GPS Tracking"
+msgstr "Theo dõi GPS đội xe"
+
+#. module: bm_fleet_gps
+#: model:ir.model,name:bm_fleet_gps.model_bm_fleet_request_user
+msgid "Fleet Request User - Data Storage Only"
+msgstr "Người dùng yêu cầu đội xe - Chỉ lưu trữ dữ liệu"
+
+#. module: bm_fleet_gps
+#: model:ir.model,name:bm_fleet_gps.model_bm_fleet_team
+msgid "Fleet Team"
+msgstr "Đội xe"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_request_user__message_follower_ids
+msgid "Followers"
+msgstr "Người theo dõi"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_request_user__message_partner_ids
+msgid "Followers (Partners)"
+msgstr "Người theo dõi (Đối tác)"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,help:bm_fleet_gps.field_bm_fleet_request_user__activity_type_icon
+msgid "Font awesome icon e.g. fa-tasks"
+msgstr "Biểu tượng font awesome ví dụ: fa-tasks"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.fleet_vehicle_view_form_gps
+msgid "Fuel Consumption"
+msgstr "Mức tiêu thụ nhiên liệu"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,help:bm_fleet_gps.field_fleet_vehicle__fuel_consumption
+msgid "Fuel consumption rate in liters per 100 kilometers (manually entered)"
+msgstr "Mức tiêu thụ nhiên liệu tính bằng lít trên 100 km (nhập thủ công)"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,help:bm_fleet_gps.field_fleet_vehicle__violation_api_response
+msgid "Full API response from iphatnguoi.com - source for computed fields"
+msgstr "Phản hồi API đầy đủ từ iphatnguoi.com - nguồn cho các trường tính toán"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.fleet_vehicle_view_kanban_gps
+msgid "Future Driver :"
+msgstr "Lái xe tương lai:"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.res_config_settings_view_form
+msgid "GPS API Configuration"
+msgstr "Cấu hình API GPS"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_res_config_settings__gps_api_password
+msgid "GPS API Password"
+msgstr "Mật khẩu API GPS"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_res_config_settings__gps_api_url
+msgid "GPS API URL"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_res_config_settings__gps_api_username
+msgid "GPS API Username"
+msgstr "Tên đăng nhập API GPS"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_transportation_journey__gps_status
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.fleet_transportation_journey_view_form
+msgid "GPS Active"
+msgstr "GPS hoạt động"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_fleet_vehicle__gps_company_id
+msgid "GPS Company ID"
+msgstr "Mã công ty GPS"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.fleet_vehicle_view_form_gps
+msgid "GPS Device Configuration"
+msgstr "Cấu hình thiết bị GPS"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.fleet_transportation_journey_view_form
+msgid "GPS Information"
+msgstr "Thông tin GPS"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields.selection,name:bm_fleet_gps.selection__fleet_vehicle__vehicle_status__offline
+msgid "GPS Offline"
+msgstr "GPS ngoại tuyến"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.fleet_transportation_journey_view_list
+msgid "GPS Points"
+msgstr "Điểm GPS"
+
+#. module: bm_fleet_gps
+#. odoo-python
+#: code:addons/bm_fleet_gps/models/bm_fleet_vehicle.py:0
+msgid "GPS Sync Completed"
+msgstr "Đồng bộ GPS hoàn tất"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.fleet_transportation_journey_view_list
+msgid "GPS Time"
+msgstr "Thời gian GPS"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.fleet_vehicle_view_form_gps
+msgid "GPS Tracking"
+msgstr "Theo dõi GPS"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.fleet_vehicle_view_list_gps_main
+msgid "GPS Vehicles"
+msgstr "Phương tiện GPS"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.fleet_vehicle_view_kanban_gps
+msgid "GPS connection lost or no recent data"
+msgstr "Mất kết nối GPS hoặc không có dữ liệu gần đây"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,help:bm_fleet_gps.field_bm_fleet_transportation_journey__gps_status
+msgid "GPS signal status"
+msgstr "Trạng thái tín hiệu GPS"
+
+#. module: bm_fleet_gps
+#. odoo-python
+#: code:addons/bm_fleet_gps/models/bm_fleet_vehicle.py:0
+msgid "GPS sync failed: %s"
+msgstr "Đồng bộ GPS thất bại: %s"
+
+#. module: bm_fleet_gps
+#: model:ir.actions.server,name:bm_fleet_gps.ir_cron_fetch_missing_addresses_ir_actions_server
+msgid "GPS: Lấy địa chỉ cho waypoints"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.actions.server,name:bm_fleet_gps.ir_cron_sync_gps_waypoints_ir_actions_server
+msgid "GPS: Đồng bộ lịch sử di chuyển (waypoints)"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.actions.server,name:bm_fleet_gps.ir_cron_sync_vehicle_status_ir_actions_server
+msgid "GPS: Đồng bộ tình trạng xe real-time"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,help:bm_fleet_gps.field_fleet_vehicle__current_address
+msgid "Geocoded address from coordinates"
+msgstr "Địa chỉ mã hóa địa lý từ tọa độ"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.res_config_settings_view_form
+msgid "Geocoding Batch"
+msgstr "Lô mã hóa địa lý"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_res_config_settings__geocoding_batch_limit
+msgid "Geocoding Batch Limit"
+msgstr "Giới hạn lô mã hóa địa lý"
+
+#. module: bm_fleet_gps
+#: model:ir.model,name:bm_fleet_gps.model_bm_fleet_geocoding_mixin
+msgid "Geocoding Mixin for GPS Coordinates"
+msgstr "Mixin mã hóa địa lý cho tọa độ GPS"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_service_booking_wizard__notes
+msgid "Ghi chú"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.fleet_transportation_journey_view_search
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.fleet_vehicle_view_search_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.view_fleet_vehicle_log_services_search_v2
+msgid "Group By"
+msgstr "Nhóm theo"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_request_user__has_message
+msgid "Has Message"
+msgstr "Có tin nhắn"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.fleet_transportation_journey_view_search
+msgid "Has Movement (>0 km)"
+msgstr "Có di chuyển (>0 km)"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.fleet_vehicle_view_search_gps
+msgid "Has Pending Violations"
+msgstr "Có vi phạm chưa xử lý"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,help:bm_fleet_gps.field_res_config_settings__violation_cache_hours
+msgid ""
+"How long to cache violation check results before re-checking (in hours)"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields.selection,name:bm_fleet_gps.selection__fleet_vehicle_log_services__state__done
+msgid "Hoàn thành"
+msgstr "Hoàn tất"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_address_history__active
+msgid "Hoạt động"
+msgstr ""
+
+#. module: bm_fleet_gps
+#. odoo-python
+#: code:addons/bm_fleet_gps/models/bm_fleet_vehicle.py:0
+#: code:addons/bm_fleet_gps/models/bm_fleet_vehicle_log_services.py:0
+msgid "Hành trình - %s"
+msgstr ""
+
+#. module: bm_fleet_gps
+#. odoo-python
+#: code:addons/bm_fleet_gps/models/bm_fleet_vehicle_log_services.py:0
+msgid "Hành trình - %s (%s → %s)"
+msgstr ""
+
+#. module: bm_fleet_gps
+#. odoo-python
+#: code:addons/bm_fleet_gps/models/bm_fleet_vehicle_log_services.py:0
+msgid "Hành trình - %s (từ %s)"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_fleet_vehicle__violation_behavior
+msgid "Hành vi vi phạm"
+msgstr ""
+
+#. module: bm_fleet_gps
+#. odoo-javascript
+#: code:addons/bm_fleet_gps/static/src/xml/journey_map_template.xml:0
+msgid "Hướng dẫn:"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.module.category,description:bm_fleet_gps.module_category_bm_fleet_gps
+msgid "Hệ thống đăng ký và quản lý đặt xe"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields.selection,name:bm_fleet_gps.selection__fleet_vehicle_log_services__state__cancelled
+msgid "Hủy phê duyệt"
+msgstr "Đã hủy"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_address_history__id
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_request_user__id
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_service_booking_wizard__id
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_service_rejection_wizard__id
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_team__id
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_transportation_journey__id
+msgid "ID"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_request_user__activity_exception_icon
+msgid "Icon"
+msgstr "Biểu tượng"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,help:bm_fleet_gps.field_bm_fleet_request_user__activity_exception_icon
+msgid "Icon to indicate an exception activity."
+msgstr "Biểu tượng để chỉ hoạt động ngoại lệ."
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields.selection,name:bm_fleet_gps.selection__fleet_vehicle__vehicle_status__idle
+msgid "Idle/Parked"
+msgstr "Đỗ xe/Không hoạt động"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,help:bm_fleet_gps.field_bm_fleet_request_user__message_needaction
+msgid "If checked, new messages require your attention."
+msgstr "Nếu được chọn, tin nhắn mới cần sự chú ý của bạn."
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,help:bm_fleet_gps.field_bm_fleet_request_user__message_has_error
+#: model:ir.model.fields,help:bm_fleet_gps.field_bm_fleet_request_user__message_has_sms_error
+msgid "If checked, some messages have a delivery error."
+msgstr "Nếu được chọn, một số tin nhắn có lỗi gửi."
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields.selection,name:bm_fleet_gps.selection__fleet_vehicle__vehicle_status__running
+msgid "In Use"
+msgstr "Đang sử dụng"
+
+#. module: bm_fleet_gps
+#. odoo-python
+#: code:addons/bm_fleet_gps/models/bm_fleet_vehicle.py:0
+msgid "Invalid JSON response from violation API"
+msgstr ""
+
+#. module: bm_fleet_gps
+#. odoo-python
+#: code:addons/bm_fleet_gps/models/bm_fleet_vehicle.py:0
+msgid "Invalid response format from violation API"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_request_user__message_is_follower
+msgid "Is Follower"
+msgstr "Là người theo dõi"
+
+#. module: bm_fleet_gps
+#: model:ir.actions.client,name:bm_fleet_gps.fleet_journey_map_action
+#: model:ir.ui.menu,name:bm_fleet_gps.menu_fleet_journey_map
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.view_fleet_vehicle_log_services_form_v2
+msgid "Journey"
+msgstr "Hành trình"
+
+#. module: bm_fleet_gps
+#. odoo-python
+#: code:addons/bm_fleet_gps/models/bm_fleet_vehicle.py:0
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_fleet_vehicle__transportation_journey_count
+msgid "Journey Count"
+msgstr "Số lượng hành trình"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.res_config_settings_view_form
+msgid "Journey Data Retention"
+msgstr "Lưu trữ dữ liệu hành trình"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.res_config_settings_view_form
+msgid "Keep Data For"
+msgstr "Giữ dữ liệu trong"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_transportation_journey__distance
+msgid "Khoảng cách (km)"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields.selection,name:bm_fleet_gps.selection__bm_fleet_service_booking_wizard__service_category__other
+msgid "Khác"
+msgstr ""
+
+#. module: bm_fleet_gps
+#. odoo-python
+#: code:addons/bm_fleet_gps/models/bm_fleet_vehicle.py:0
+#: model:ir.model.fields.selection,name:bm_fleet_gps.selection__fleet_vehicle__violation_status__none
+msgid "Không có vi phạm"
+msgstr ""
+
+#. module: bm_fleet_gps
+#. odoo-python
+#: code:addons/bm_fleet_gps/models/bm_fleet_vehicle_log_services.py:0
+msgid ""
+"Không thể thay đổi trạng thái trực tiếp. Vui lòng sử dụng các nút phê duyệt "
+"trong form view."
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_address_history__longitude
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_transportation_journey__longitude
+msgid "Kinh độ"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_fleet_vehicle_log_services__work_location_longitude
+msgid "Kinh độ (Longitude)"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,help:bm_fleet_gps.field_bm_fleet_address_history__longitude
+msgid "Kinh độ (Longitude) từ OpenStreetMap"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_service_booking_wizard__work_departure_longitude
+msgid "Kinh độ (điểm đi)"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_service_booking_wizard__work_location_longitude
+msgid "Kinh độ (điểm đến)"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,help:bm_fleet_gps.field_fleet_vehicle_log_services__work_location_longitude
+msgid "Kinh độ của địa điểm công tác từ bản đồ"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_fleet_vehicle_log_services__work_departure_longitude
+msgid "Kinh độ điểm đi"
+msgstr ""
+
+#. module: bm_fleet_gps
+#. odoo-python
+#: code:addons/bm_fleet_gps/models/bm_fleet_vehicle.py:0
+msgid "Kiểm tra hoàn tất"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.fleet_transportation_journey_view_search
+msgid "Last 7 Days"
+msgstr "7 ngày qua"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_fleet_vehicle__last_update
+msgid "Last GPS Update"
+msgstr "Cập nhật GPS cuối"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,help:bm_fleet_gps.field_fleet_vehicle__last_update
+msgid "Last GPS data synchronization timestamp"
+msgstr "Dấu thời gian đồng bộ dữ liệu GPS cuối cùng"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_fleet_vehicle__last_stop_time
+msgid "Last Stop Time"
+msgstr "Thời gian dừng cuối"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_address_history__write_uid
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_request_user__write_uid
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_service_booking_wizard__write_uid
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_service_rejection_wizard__write_uid
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_team__write_uid
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_transportation_journey__write_uid
+msgid "Last Updated by"
+msgstr "Cập nhật cuối bởi"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_address_history__write_date
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_request_user__write_date
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_service_booking_wizard__write_date
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_service_rejection_wizard__write_date
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_team__write_date
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_transportation_journey__write_date
+msgid "Last Updated on"
+msgstr "Cập nhật cuối lúc"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,help:bm_fleet_gps.field_fleet_vehicle__last_stop_time
+msgid "Last time engine was turned off"
+msgstr "Lần cuối động cơ bị tắt"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,help:bm_fleet_gps.field_fleet_vehicle__violation_checked_time
+msgid "Last time violation check was performed (for cache logic)"
+msgstr "Lần cuối kiểm tra vi phạm được thực hiện (cho logic cache)"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.fleet_vehicle_view_form_gps
+msgid "Latest Violation Information"
+msgstr "Thông tin vi phạm gần nhất"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,help:bm_fleet_gps.field_fleet_vehicle__violation_time
+msgid "Latest violation timestamp (computed from API response)"
+msgstr "Thời gian vi phạm gần nhất (tính từ phản hồi API)"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.fleet_transportation_journey_view_list
+msgid "Latitude"
+msgstr "Vĩ độ"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,help:bm_fleet_gps.field_bm_fleet_transportation_journey__latitude
+msgid "Latitude coordinate"
+msgstr "Tọa độ vĩ độ"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.fleet_transportation_journey_view_list
+msgid "Longitude"
+msgstr "Kinh độ"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,help:bm_fleet_gps.field_bm_fleet_transportation_journey__longitude
+msgid "Longitude coordinate"
+msgstr "Tọa độ kinh độ"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_fleet_vehicle_log_services__service_type_id
+msgid "Loại dịch vụ chính"
+msgstr "Loại dịch vụ"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_service_rejection_wizard__rejection_reason
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_fleet_vehicle_log_services__rejection_reason
+msgid "Lý do từ chối"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,help:bm_fleet_gps.field_bm_fleet_address_history__last_used_date
+msgid "Lần cuối cùng địa chỉ này được sử dụng"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_address_history__last_used_date
+msgid "Lần dùng cuối"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_fleet_vehicle__violation_checked_time
+msgid "Lần kiểm tra cuối"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model,name:bm_fleet_gps.model_bm_fleet_address_history
+msgid "Lịch sử địa chỉ công tác"
+msgstr ""
+
+#. module: bm_fleet_gps
+#. odoo-javascript
+#: code:addons/bm_fleet_gps/static/src/xml/journey_map_template.xml:0
+msgid "Lọc thời gian"
+msgstr ""
+
+#. module: bm_fleet_gps
+#. odoo-python
+#: code:addons/bm_fleet_gps/models/bm_fleet_request_user.py:0
+#: code:addons/bm_fleet_gps/models/bm_fleet_team.py:0
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_request_user__manager_id
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_team__manager_id
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.view_fleet_team_form
+msgid "Manager"
+msgstr "Quản lý"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_service_booking_wizard__manager_user_request_id
+msgid "Manager Profile"
+msgstr "Hồ sơ quản lý"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,help:bm_fleet_gps.field_bm_fleet_request_user__manager_id
+msgid "Manager who approves this user's bookings"
+msgstr "Quản lý phê duyệt đặt xe của người dùng này"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,help:bm_fleet_gps.field_bm_fleet_transportation_journey__is_address_synced
+msgid "Marks whether this waypoint has been processed for address geocoding"
+msgstr "Đánh dấu xem điểm đường này đã được xử lý để mã hóa địa lý địa chỉ chưa"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,help:bm_fleet_gps.field_res_config_settings__geocoding_batch_limit
+msgid "Maximum number of addresses to geocode per cron job run"
+msgstr "Số lượng địa chỉ tối đa để mã hóa địa lý mỗi lần chạy cron job"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.view_fleet_team_form
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.view_fleet_team_list
+msgid "Member Count"
+msgstr "Số lượng thành viên"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.view_fleet_team_form
+msgid "Members"
+msgstr "Thành viên"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_request_user__message_has_error
+msgid "Message Delivery error"
+msgstr "Lỗi gửi tin nhắn"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_request_user__message_ids
+msgid "Messages"
+msgstr "Tin nhắn"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.fleet_transportation_journey_view_search
+msgid "Month"
+msgstr "Tháng"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_request_user__my_activity_date_deadline
+msgid "My Activity Deadline"
+msgstr "Hạn hoạt động của tôi"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_transportation_journey__machine_status
+msgid "Máy nổ"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,help:bm_fleet_gps.field_fleet_vehicle_log_services__name
+msgid "Mã tham chiếu duy nhất cho đơn đặt xe"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_fleet_vehicle_log_services__name
+msgid "Mã đặt xe"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_service_booking_wizard__description
+msgid "Mô tả chi tiết"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields.selection,name:bm_fleet_gps.selection__fleet_vehicle_log_services__state__new
+msgid "Mới"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_service_booking_wizard__work_purpose
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_fleet_vehicle_log_services__work_purpose
+msgid "Mục đích công tác"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_fleet_vehicle__fuel_consumption
+msgid "Mức tiêu thụ nhiên liệu (l/100km)"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.view_fleet_team_form
+msgid "Name"
+msgstr "Tên"
+
+#. module: bm_fleet_gps
+#. odoo-python
+#: code:addons/bm_fleet_gps/models/bm_fleet_request_user.py:0
+#: code:addons/bm_fleet_gps/models/bm_fleet_vehicle_log_services.py:0
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.view_fleet_vehicle_log_services_search_v2
+msgid "New"
+msgstr "Mới"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_request_user__activity_date_deadline
+msgid "Next Activity Deadline"
+msgstr "Hạn hoạt động tiếp theo"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_request_user__activity_summary
+msgid "Next Activity Summary"
+msgstr "Tóm tắt hoạt động tiếp theo"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_request_user__activity_type_id
+msgid "Next Activity Type"
+msgstr "Loại hoạt động tiếp theo"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_service_booking_wizard__work_date_start
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_fleet_vehicle_log_services__work_date_start
+msgid "Ngày giờ bắt đầu công tác"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_service_booking_wizard__work_date_end
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_fleet_vehicle_log_services__work_date_end
+msgid "Ngày giờ kết thúc dự kiến"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,help:bm_fleet_gps.field_fleet_vehicle_log_services__submission_date
+msgid "Ngày giờ tạo đơn đăng ký đặt xe"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_fleet_vehicle_log_services__manager_approval_date
+msgid "Ngày phê duyệt"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_fleet_vehicle_log_services__rejection_date
+msgid "Ngày từ chối"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,help:bm_fleet_gps.field_fleet_vehicle_log_services__date
+msgid "Ngày và giờ xe khởi hành"
+msgstr "Ngày thực hiện chi phí"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,help:bm_fleet_gps.field_fleet_vehicle_log_services__date_arrival
+msgid "Ngày và giờ xe trở về"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_fleet_vehicle_log_services__date
+msgid "Ngày xe khởi hành"
+msgstr "Ngày"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_fleet_vehicle_log_services__date_arrival
+msgid "Ngày xe đến"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_fleet_vehicle_log_services__admin_approval_date
+msgid "Ngày điều xe"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_fleet_vehicle_log_services__submission_date
+msgid "Ngày đặt xe"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:res.groups,name:bm_fleet_gps.group_bm_fleet_user
+msgid "Người dùng"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_service_booking_wizard__manager_id
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_fleet_vehicle_log_services__manager_id
+msgid "Người phê duyệt"
+msgstr "Quản lý đội xe"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,help:bm_fleet_gps.field_fleet_vehicle_log_services__manager_id
+msgid "Người sẽ phê duyệt đơn đặt xe này"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,help:bm_fleet_gps.field_bm_fleet_service_booking_wizard__manager_id
+msgid ""
+"Người sẽ phê duyệt đơn đặt xe này. Nếu để trống, hệ thống sẽ tự động chọn "
+"manager từ cấu hình user."
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,help:bm_fleet_gps.field_fleet_vehicle_log_services__submitted_by
+msgid "Người tạo đơn đăng ký đặt xe"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,help:bm_fleet_gps.field_bm_fleet_service_booking_wizard__requester_id
+msgid "Người tạo đơn đặt xe (có thể đặt thay cho người khác)"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_fleet_vehicle_log_services__rejected_by
+msgid "Người từ chối"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_service_booking_wizard__requester_id
+msgid "Người yêu cầu"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_fleet_vehicle_log_services__user_ids
+msgid "Người đi công tác"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_fleet_vehicle_log_services__dispatched_by
+msgid "Người điều xe"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_fleet_vehicle_log_services__submitted_by
+msgid "Người đặt xe"
+msgstr ""
+
+#. module: bm_fleet_gps
+#. odoo-python
+#: code:addons/bm_fleet_gps/models/bm_fleet_vehicle_log_services.py:0
+msgid "Nhập lý do từ chối"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.fleet_vehicle_view_search_gps
+msgid "No Violations"
+msgstr "Không có vi phạm"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.actions.act_window,help:bm_fleet_gps.fleet_transportation_journey_action
+msgid "No journeys have been recorded yet"
+msgstr "Chưa có hành trình nào được ghi nhận"
+
+#. module: bm_fleet_gps
+#. odoo-python
+#: code:addons/bm_fleet_gps/models/bm_fleet_request_user.py:0
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_request_user__notes
+msgid "Notes"
+msgstr "Ghi chú"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_request_user__message_needaction_counter
+msgid "Number of Actions"
+msgstr "Số lượng hành động"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,help:bm_fleet_gps.field_fleet_vehicle_log_services__transportation_journey_count
+msgid "Number of GPS waypoints for the dispatched vehicle"
+msgstr "Số lượng điểm GPS cho phương tiện được điều"
+
+#. module: bm_fleet_gps
+#. odoo-python
+#: code:addons/bm_fleet_gps/models/bm_fleet_team.py:0
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_team__member_count
+msgid "Number of Members"
+msgstr "Số lượng thành viên"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,help:bm_fleet_gps.field_res_config_settings__gps_retention_days
+msgid "Number of days to keep GPS journey data before automatic cleanup"
+msgstr "Số ngày giữ dữ liệu hành trình GPS trước khi dọn dẹp tự động"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_request_user__message_has_error_counter
+msgid "Number of errors"
+msgstr "Số lượng lỗi"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,help:bm_fleet_gps.field_bm_fleet_request_user__message_needaction_counter
+msgid "Number of messages requiring action"
+msgstr "Số lượng tin nhắn cần hành động"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,help:bm_fleet_gps.field_bm_fleet_request_user__message_has_error_counter
+msgid "Number of messages with delivery error"
+msgstr "Số lượng tin nhắn có lỗi gửi"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,help:bm_fleet_gps.field_fleet_vehicle__violation_count
+msgid "Number of pending violations (for sorting and grouping)"
+msgstr "Số lượng vi phạm chưa xử lý (để sắp xếp và nhóm)"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,help:bm_fleet_gps.field_res_config_settings__gps_delete_batch_size
+msgid "Number of records to delete per batch during cleanup"
+msgstr "Số lượng bản ghi xóa mỗi lô trong quá trình dọn dẹp"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,help:bm_fleet_gps.field_res_config_settings__gps_sync_batch_size
+msgid "Number of vehicles to sync per batch during scheduled sync"
+msgstr "Số lượng phương tiện đồng bộ mỗi lô trong đồng bộ theo lịch"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,help:bm_fleet_gps.field_bm_fleet_transportation_journey__timestamp
+msgid "Original TimeUpdate from GPS API"
+msgstr "TimeUpdate gốc từ API GPS"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.view_fleet_team_form
+msgid "Other Information"
+msgstr "Thông tin khác"
+
+#. module: bm_fleet_gps
+#. odoo-python
+#: code:addons/bm_fleet_gps/models/bm_fleet_team.py:0
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_team__parent_id
+msgid "Parent Team"
+msgstr "Đội nhóm cha"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.res_config_settings_view_form
+msgid "Password"
+msgstr "Mật khẩu"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,help:bm_fleet_gps.field_res_config_settings__gps_api_password
+msgid "Password for ADSUN GPS API authentication"
+msgstr "Mật khẩu để xác thực API GPS ADSUN"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.view_fleet_vehicle_log_services_search_v2
+msgid "Pending Approval"
+msgstr "Chờ phê duyệt"
+
+#. module: bm_fleet_gps
+#. odoo-javascript
+#: code:addons/bm_fleet_gps/static/src/xml/journey_map_template.xml:0
+msgid "Phát"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_service_booking_wizard__service_category
+msgid "Phân loại dịch vụ"
+msgstr ""
+
+#. module: bm_fleet_gps
+#. odoo-python
+#: code:addons/bm_fleet_gps/models/bm_fleet_vehicle.py:0
+msgid "Please configure GPS device serial number first!"
+msgstr "Vui lòng cấu hình số serial thiết bị GPS trước!"
+
+#. module: bm_fleet_gps
+#. odoo-python
+#: code:addons/bm_fleet_gps/models/bm_fleet_vehicle.py:0
+msgid "Please enter license plate first"
+msgstr "Vui lòng nhập biển số trước"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,help:bm_fleet_gps.field_fleet_vehicle__violation_detecting_unit
+msgid "Police unit that detected violation (computed from API response)"
+msgstr "Đơn vị cảnh sát phát hiện vi phạm (tính từ phản hồi API)"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.fleet_transportation_journey_view_form
+msgid "Position"
+msgstr "Vị trí"
+
+#. module: bm_fleet_gps
+#. odoo-python
+#: code:addons/bm_fleet_gps/models/bm_fleet_vehicle_log_services.py:0
+#: model:ir.model.fields.selection,name:bm_fleet_gps.selection__fleet_vehicle_log_services__state__pending_manager
+msgid "Quản lý phê duyệt"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,help:bm_fleet_gps.field_bm_fleet_transportation_journey__api_data
+msgid "Raw data from ADSUN API (for debugging)"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.view_fleet_service_booking_wizard_form
+msgid "Register"
+msgstr "Đăng ký"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.actions.act_window,help:bm_fleet_gps.fleet_vehicle_services_user_action
+msgid "Register new vehicle booking"
+msgstr "Đăng ký đặt xe mới"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.view_fleet_vehicle_log_services_form_v2
+msgid "Reject"
+msgstr "Từ chối"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.view_fleet_vehicle_log_services_form_v2
+msgid "Rejection Information"
+msgstr "Thông tin từ chối"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.view_fleet_service_rejection_wizard_form
+msgid "Rejection Reason"
+msgstr "Lý do từ chối"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.view_fleet_vehicle_log_services_form_v2
+msgid "Requester"
+msgstr "Người yêu cầu"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_service_booking_wizard__requester_user_request_id
+msgid "Requester Profile"
+msgstr "Hồ sơ người yêu cầu"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.view_fleet_vehicle_log_services_form_v2
+msgid "Reset"
+msgstr "Đặt lại"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_request_user__activity_user_id
+msgid "Responsible User"
+msgstr "Người phụ trách"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.view_fleet_vehicle_log_services_search_v2
+msgid "Running"
+msgstr "Đang chạy"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_fleet_vehicle__running_time_week
+msgid "Running Time This Week (hours)"
+msgstr "Thời gian chạy tuần này (giờ)"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_fleet_vehicle__running_time_today
+msgid "Running Time Today (hours)"
+msgstr "Thời gian chạy hôm nay (giờ)"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_request_user__message_has_sms_error
+msgid "SMS Delivery error"
+msgstr "Lỗi gửi SMS"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.res_config_settings_view_form
+msgid "SSL Verification"
+msgstr "Xác minh SSL"
+
+#. module: bm_fleet_gps
+#. odoo-python
+#: code:addons/bm_fleet_gps/models/bm_fleet_request_user.py:0
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_request_user__sale_admin_id
+#: model:res.groups,name:bm_fleet_gps.group_bm_fleet_sale_admin
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.view_fleet_team_form
+msgid "Sale Admin"
+msgstr "Quản trị bán hàng"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,help:bm_fleet_gps.field_bm_fleet_request_user__sale_admin_id
+msgid "Sale admin who dispatches vehicles for this user's bookings"
+msgstr "Quản trị bán hàng điều xe cho đặt xe của người dùng này"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.view_fleet_vehicle_log_services_search_v2
+msgid "Search Booking Requests"
+msgstr "Tìm kiếm yêu cầu đặt xe"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.fleet_transportation_journey_view_search
+msgid "Search GPS Points"
+msgstr "Tìm kiếm điểm GPS"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.view_fleet_service_booking_wizard_form
+msgid "Select accompanying members (if any)"
+msgstr "Chọn thành viên đi cùng (nếu có)"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.view_fleet_service_booking_wizard_form
+msgid "Select team or contact Admin to create new team"
+msgstr "Chọn đội nhóm hoặc liên hệ Quản trị viên để tạo đội nhóm mới"
+
+#. module: bm_fleet_gps
+#: model:ir.model,name:bm_fleet_gps.model_bm_fleet_service_rejection_wizard
+msgid "Service Rejection Wizard"
+msgstr "Trình hướng dẫn từ chối dịch vụ"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.view_fleet_vehicle_log_services_search_v2
+msgid "Service Type"
+msgstr "Loại dịch vụ"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.view_fleet_vehicle_log_services_list
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.view_fleet_vehicle_log_services_list_user
+msgid "Services"
+msgstr "Dịch vụ"
+
+#. module: bm_fleet_gps
+#: model:ir.model,name:bm_fleet_gps.model_fleet_vehicle_log_services
+msgid "Services for vehicles"
+msgstr "Các dịch vụ cho xe"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,help:bm_fleet_gps.field_bm_fleet_request_user__active
+msgid "Set to false to deactivate this profile without deleting it"
+msgstr "Đặt thành false để vô hiệu hóa hồ sơ này mà không xóa nó"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.fleet_transportation_journey_view_form
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.fleet_transportation_journey_view_list
+msgid "Speed (km/h)"
+msgstr "Tốc độ (km/h)"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.view_fleet_vehicle_log_services_search_v2
+msgid "Status"
+msgstr "Trạng thái"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,help:bm_fleet_gps.field_bm_fleet_request_user__activity_state
+msgid ""
+"Status based on activities\n"
+"Overdue: Due date is already passed\n"
+"Today: Activity date is today\n"
+"Planned: Future activities."
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.view_fleet_vehicle_log_services_form_v2
+msgid "Submit for Approval"
+msgstr "Gửi phê duyệt"
+
+#. module: bm_fleet_gps
+#. odoo-python
+#: code:addons/bm_fleet_gps/models/bm_fleet_transportation_journey.py:0
+msgid "Success"
+msgstr "Thành công"
+
+#. module: bm_fleet_gps
+#. odoo-python
+#: code:addons/bm_fleet_gps/models/bm_fleet_vehicle.py:0
+msgid ""
+"Successfully synced today's GPS data:\n"
+"• Created: %d waypoints\n"
+"• Skipped: %d duplicates\n"
+"• Total: %d points"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_res_config_settings__gps_sync_batch_size
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.res_config_settings_view_form
+msgid "Sync Batch Size"
+msgstr "Kích thước lô đồng bộ"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.fleet_vehicle_view_form_gps
+msgid "Sync GPS Today"
+msgstr "Đồng bộ GPS hôm nay"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.fleet_transportation_journey_view_form
+msgid "Sync Information (Technical)"
+msgstr "Thông tin đồng bộ (Kỹ thuật)"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.fleet_transportation_journey_view_form
+msgid "Sync Time"
+msgstr "Thời gian đồng bộ"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.fleet_vehicle_view_form_gps
+msgid "Sync today's GPS location data"
+msgstr "Đồng bộ dữ liệu vị trí GPS hôm nay"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_address_history__usage_count
+msgid "Số lần sử dụng"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_fleet_vehicle__violation_count
+msgid "Số lần vi phạm chưa xử lý"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,help:bm_fleet_gps.field_bm_fleet_address_history__usage_count
+msgid "Số lần địa chỉ này được sử dụng"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_fleet_vehicle_log_services__transportation_journey_count
+msgid "Số điểm hành trình"
+msgstr ""
+
+#. module: bm_fleet_gps
+#. odoo-python
+#: code:addons/bm_fleet_gps/models/bm_fleet_request_user.py:0
+#: model:ir.actions.act_window,name:bm_fleet_gps.action_fleet_team
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_request_user__team_id
+#: model:ir.ui.menu,name:bm_fleet_gps.menu_fleet_team
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.view_fleet_team_form
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.view_fleet_vehicle_log_services_search_v2
+msgid "Team"
+msgstr "Đội nhóm"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.view_fleet_team_form
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.view_fleet_team_list
+msgid "Team Leader"
+msgstr "Trưởng nhóm"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.view_fleet_team_list
+msgid "Team List"
+msgstr "Danh sách đội nhóm"
+
+#. module: bm_fleet_gps
+#. odoo-python
+#: code:addons/bm_fleet_gps/models/bm_fleet_team.py:0
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_team__member_ids
+msgid "Team Members"
+msgstr "Thành viên đội nhóm"
+
+#. module: bm_fleet_gps
+#. odoo-python
+#: code:addons/bm_fleet_gps/models/bm_fleet_team.py:0
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_team__name
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.view_fleet_team_form
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.view_fleet_team_list
+msgid "Team Name"
+msgstr "Tên đội nhóm"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,help:bm_fleet_gps.field_bm_fleet_service_booking_wizard__team_id
+msgid "Team nào yêu cầu đặt xe"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,help:bm_fleet_gps.field_bm_fleet_request_user__team_id
+msgid "Team the user belongs to"
+msgstr "Đội nhóm mà người dùng thuộc về"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_service_booking_wizard__team_id
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_fleet_vehicle_log_services__team_id
+msgid "Team yêu cầu"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.fleet_transportation_journey_view_search
+msgid "This Month"
+msgstr "Tháng này"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_service_booking_wizard__user_ids
+msgid "Thành viên tham gia"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_fleet_vehicle__violation_time
+msgid "Thời gian vi phạm gần nhất"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_transportation_journey__timestamp
+msgid "Timestamp"
+msgstr "Dấu thời gian"
+
+#. module: bm_fleet_gps
+#. odoo-javascript
+#: code:addons/bm_fleet_gps/static/src/xml/journey_map_template.xml:0
+msgid "Tiếp tục"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.fleet_transportation_journey_view_search
+msgid "Today"
+msgstr "Hôm nay"
+
+#. module: bm_fleet_gps
+#. odoo-python
+#: code:addons/bm_fleet_gps/models/bm_fleet_vehicle.py:0
+msgid "Too many requests to violation API. Please try again later."
+msgstr "Quá nhiều yêu cầu đến API vi phạm. Vui lòng thử lại sau."
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,help:bm_fleet_gps.field_fleet_vehicle__total_fuel_used
+msgid "Total fuel consumed today = distance × fuel_consumption / 100"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,help:bm_fleet_gps.field_fleet_vehicle__running_time_week
+msgid "Total running hours this week"
+msgstr "Tổng giờ chạy tuần này"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,help:bm_fleet_gps.field_fleet_vehicle__running_time_today
+msgid "Total running hours today"
+msgstr "Tổng giờ chạy hôm nay"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.res_config_settings_view_form
+msgid "Traffic Violation Checking"
+msgstr "Kiểm tra vi phạm giao thông"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.fleet_vehicle_view_form_gps
+msgid "Traffic Violations"
+msgstr "Vi phạm giao thông"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,help:bm_fleet_gps.field_fleet_vehicle__violation_status
+msgid "Traffic violation status for filtering and searching"
+msgstr "Trạng thái vi phạm giao thông để lọc và tìm kiếm"
+
+#. module: bm_fleet_gps
+#: model:ir.actions.act_window,name:bm_fleet_gps.fleet_transportation_journey_action
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.fleet_transportation_journey_view_form
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.fleet_vehicle_view_form_gps
+msgid "Transportation Journey"
+msgstr "Hành trình vận chuyển"
+
+#. module: bm_fleet_gps
+#: model:ir.model,name:bm_fleet_gps.model_bm_fleet_transportation_journey
+msgid "Transportation Journey - GPS Waypoint (Điểm hành trình GPS)"
+msgstr ""
+
+#. module: bm_fleet_gps
+#. odoo-python
+#: code:addons/bm_fleet_gps/models/bm_fleet_vehicle.py:0
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_fleet_vehicle__transportation_journey_ids
+msgid "Transportation Journeys"
+msgstr "Hành trình vận chuyển"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.actions.act_window,help:bm_fleet_gps.fleet_transportation_journey_action
+msgid ""
+"Transportation journeys will be automatically synced from ADSUN GPS system."
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_fleet_vehicle_log_services__state
+msgid "Trạng thái"
+msgstr "Giai đoạn"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_fleet_vehicle__violation_status
+msgid "Trạng thái phạt nguội"
+msgstr ""
+
+#. module: bm_fleet_gps
+#. odoo-javascript
+#: code:addons/bm_fleet_gps/static/src/xml/journey_map_template.xml:0
+msgid "Tuyến đang phát"
+msgstr ""
+
+#. module: bm_fleet_gps
+#. odoo-python
+#: code:addons/bm_fleet_gps/models/bm_fleet_vehicle_log_services.py:0
+msgid "Tuyến đường - %s"
+msgstr ""
+
+#. module: bm_fleet_gps
+#. odoo-python
+#: code:addons/bm_fleet_gps/models/bm_fleet_vehicle_log_services.py:0
+msgid "Tuyến đường - %s (%s → %s)"
+msgstr ""
+
+#. module: bm_fleet_gps
+#. odoo-python
+#: code:addons/bm_fleet_gps/models/bm_fleet_vehicle_log_services.py:0
+msgid "Tuyến đường - %s (từ %s)"
+msgstr ""
+
+#. module: bm_fleet_gps
+#. odoo-javascript
+#: code:addons/bm_fleet_gps/static/src/xml/journey_map_template.xml:0
+msgid "Tuyến đường sẽ đi"
+msgstr ""
+
+#. module: bm_fleet_gps
+#. odoo-javascript
+#: code:addons/bm_fleet_gps/static/src/xml/journey_map_template.xml:0
+msgid "Tuyến đường đã đi"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,help:bm_fleet_gps.field_bm_fleet_request_user__activity_exception_decoration
+msgid "Type of the exception activity on record."
+msgstr "Loại hoạt động ngoại lệ trên bản ghi."
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_transportation_journey__driver_id
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_fleet_vehicle_log_services__driver_id
+msgid "Tài xế"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model.constraint,message:bm_fleet_gps.constraint_bm_fleet_team_name_company_unique
+msgid "Tên team phải unique trong cùng company!"
+msgstr ""
+
+#. module: bm_fleet_gps
+#. odoo-python
+#: code:addons/bm_fleet_gps/models/bm_fleet_vehicle.py:0
+msgid "Tìm thấy %d vi phạm chưa xử lý"
+msgstr ""
+
+#. module: bm_fleet_gps
+#. odoo-javascript
+#: code:addons/bm_fleet_gps/static/src/xml/journey_map_template.xml:0
+msgid "Tạm dừng"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_transportation_journey__speed
+msgid "Tốc độ (km/h)"
+msgstr ""
+
+#. module: bm_fleet_gps
+#. odoo-javascript
+#: code:addons/bm_fleet_gps/static/src/xml/journey_map_template.xml:0
+msgid "Tốc độ:"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_fleet_vehicle__total_fuel_used
+msgid "Tổng nhiên liệu tiêu thụ (lít)"
+msgstr ""
+
+#. module: bm_fleet_gps
+#. odoo-javascript
+#: code:addons/bm_fleet_gps/static/src/xml/journey_map_template.xml:0
+msgid "Tổng điểm:"
+msgstr ""
+
+#. module: bm_fleet_gps
+#. odoo-javascript
+#: code:addons/bm_fleet_gps/static/src/xml/journey_map_template.xml:0
+msgid "Từ ngày giờ:"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.fleet_transportation_journey_view_form
+msgid "Update Address"
+msgstr "Cập nhật địa chỉ"
+
+#. module: bm_fleet_gps
+#. odoo-python
+#: code:addons/bm_fleet_gps/models/bm_fleet_request_user.py:0
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_request_user__user_id
+msgid "User"
+msgstr "Người dùng"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,help:bm_fleet_gps.field_bm_fleet_request_user__user_id
+msgid "User who will book vehicles"
+msgstr "Người dùng sẽ đặt xe"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.res_config_settings_view_form
+msgid "Username"
+msgstr "Tên đăng nhập"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,help:bm_fleet_gps.field_res_config_settings__gps_api_username
+msgid "Username for ADSUN GPS API authentication"
+msgstr "Tên đăng nhập để xác thực API GPS ADSUN"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,help:bm_fleet_gps.field_bm_fleet_team__member_ids
+msgid "Users who are members of this team (via bm.fleet.request.user)"
+msgstr "Người dùng là thành viên của đội nhóm này (qua bm.fleet.request.user)"
+
+#. module: bm_fleet_gps
+#: model:ir.model,name:bm_fleet_gps.model_fleet_vehicle
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.fleet_transportation_journey_view_search
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.view_fleet_vehicle_log_services_search_v2
+msgid "Vehicle"
+msgstr "Xe"
+
+#. module: bm_fleet_gps
+#: model:ir.actions.act_window,name:bm_fleet_gps.action_fleet_service_booking_wizard
+#: model:ir.actions.server,name:bm_fleet_gps.action_fleet_service_booking_wizard_menu
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.view_fleet_service_booking_wizard_form
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.view_fleet_vehicle_log_services_kanban_user
+msgid "Vehicle Booking Registration"
+msgstr "Đăng ký đặt xe"
+
+#. module: bm_fleet_gps
+#. odoo-python
+#: code:addons/bm_fleet_gps/models/bm_fleet_vehicle.py:0
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_fleet_vehicle__vehicle_status
+msgid "Vehicle Status"
+msgstr "Trạng thái phương tiện"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,help:bm_fleet_gps.field_bm_fleet_transportation_journey__vehicle_id
+msgid "Vehicle for this waypoint"
+msgstr "Phương tiện cho điểm đường này"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.fleet_vehicle_view_kanban_gps
+msgid "Vehicle is in use - Engine running"
+msgstr "Phương tiện đang sử dụng - Động cơ đang chạy"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.fleet_vehicle_view_kanban_gps
+msgid "Vehicle is parked - Engine off"
+msgstr "Phương tiện đang đỗ - Động cơ tắt"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,help:bm_fleet_gps.field_bm_fleet_transportation_journey__speed
+msgid "Vehicle speed at this waypoint"
+msgstr "Tốc độ phương tiện tại điểm đường này"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,help:bm_fleet_gps.field_fleet_vehicle__vehicle_status
+msgid "Vehicle usage status based on GPS connection and engine state"
+msgstr "Trạng thái sử dụng phương tiện dựa trên kết nối GPS và trạng thái động cơ"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.fleet_vehicle_view_search_gps
+msgid "Vehicles with no violations"
+msgstr "Phương tiện không có vi phạm"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.fleet_vehicle_view_search_gps
+msgid "Vehicles with pending traffic violations"
+msgstr "Phương tiện có vi phạm giao thông chưa xử lý"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_res_config_settings__gps_ssl_verify
+msgid "Verify SSL Certificates"
+msgstr "Xác minh chứng chỉ SSL"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.fleet_vehicle_view_form_gps
+msgid "View GPS transportation journeys"
+msgstr "Xem hành trình vận chuyển GPS"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.view_fleet_vehicle_log_services_form_v2
+msgid "View GPS waypoints for the dispatched vehicle"
+msgstr "Xem các điểm GPS của phương tiện được điều"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.view_fleet_vehicle_log_services_form_v2
+msgid "View route map for the dispatched vehicle (filtered view)"
+msgstr "Xem bản đồ lộ trình của phương tiện được điều (chế độ xem được lọc)"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.res_config_settings_view_form
+msgid "Violation API Configuration"
+msgstr "Cấu hình API vi phạm"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_fleet_vehicle__violation_api_response
+msgid "Violation API Response Data"
+msgstr "Dữ liệu phản hồi API vi phạm"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_res_config_settings__violation_api_url
+msgid "Violation API URL"
+msgstr "Đường dẫn API vi phạm"
+
+#. module: bm_fleet_gps
+#. odoo-python
+#: code:addons/bm_fleet_gps/models/bm_fleet_vehicle.py:0
+msgid "Violation API endpoint not found. Check configuration."
+msgstr "Không tìm thấy điểm cuối API vi phạm. Kiểm tra cấu hình."
+
+#. module: bm_fleet_gps
+#. odoo-python
+#: code:addons/bm_fleet_gps/models/bm_fleet_vehicle.py:0
+msgid "Violation API server error. Please try again later."
+msgstr "Lỗi máy chủ API vi phạm. Vui lòng thử lại sau."
+
+#. module: bm_fleet_gps
+#. odoo-python
+#: code:addons/bm_fleet_gps/models/bm_fleet_vehicle.py:0
+msgid "Violation API timeout. Check network connection."
+msgstr "Hết thời gian API vi phạm. Kiểm tra kết nối mạng."
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_res_config_settings__violation_cache_hours
+msgid "Violation Cache Duration (hours)"
+msgstr "Thời gian lưu cache vi phạm (giờ)"
+
+#. module: bm_fleet_gps
+#. odoo-python
+#: code:addons/bm_fleet_gps/models/bm_fleet_vehicle.py:0
+msgid "Violation Check Warning"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.fleet_vehicle_view_form_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.fleet_vehicle_view_search_gps
+msgid "Violation Status"
+msgstr "Trạng thái vi phạm"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,help:bm_fleet_gps.field_fleet_vehicle__violation_behavior
+msgid "Violation behavior description (computed from API response)"
+msgstr "Mô tả hành vi vi phạm (tính từ phản hồi API)"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,help:bm_fleet_gps.field_fleet_vehicle__violation_location
+msgid "Violation location (computed from API response)"
+msgstr "Địa điểm vi phạm (tính từ phản hồi API)"
+
+#. module: bm_fleet_gps
+#. odoo-python
+#: code:addons/bm_fleet_gps/utils/notification_helper.py:0
+msgid "Vui lòng nhập đầy đủ"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_address_history__latitude
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_transportation_journey__latitude
+msgid "Vĩ độ"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_fleet_vehicle_log_services__work_location_latitude
+msgid "Vĩ độ (Latitude)"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,help:bm_fleet_gps.field_bm_fleet_address_history__latitude
+msgid "Vĩ độ (Latitude) từ OpenStreetMap"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_service_booking_wizard__work_departure_latitude
+msgid "Vĩ độ (điểm đi)"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_service_booking_wizard__work_location_latitude
+msgid "Vĩ độ (điểm đến)"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,help:bm_fleet_gps.field_fleet_vehicle_log_services__work_location_latitude
+msgid "Vĩ độ của địa điểm công tác từ bản đồ"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_fleet_vehicle_log_services__work_departure_latitude
+msgid "Vĩ độ điểm đi"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_request_user__website_message_ids
+msgid "Website Messages"
+msgstr "Tin nhắn trang web"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,help:bm_fleet_gps.field_bm_fleet_request_user__website_message_ids
+msgid "Website communication history"
+msgstr "Lịch sử giao tiếp trang web"
+
+#. module: bm_fleet_gps
+#: model:ir.model,name:bm_fleet_gps.model_bm_fleet_service_booking_wizard
+msgid "Wizard Đăng ký đặt xe"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.view_fleet_vehicle_log_services_search_v2
+msgid "Work"
+msgstr "Công tác"
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.view_fleet_service_booking_wizard_form
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.view_fleet_vehicle_log_services_form_v2
+msgid "Work Information"
+msgstr "Thông tin công tác"
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_transportation_journey__vehicle_id
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_fleet_vehicle_log_services__vehicle_id
+msgid "Xe"
+msgstr ""
+
+#. module: bm_fleet_gps
+#. odoo-python
+#: code:addons/bm_fleet_gps/models/bm_fleet_vehicle_log_services.py:0
+msgid "Xe là bắt buộc khi dịch vụ đang chạy hoặc hoàn thành"
+msgstr ""
+
+#. module: bm_fleet_gps
+#. odoo-javascript
+#: code:addons/bm_fleet_gps/static/src/xml/journey_map_template.xml:0
+msgid "Xe đang di chuyển"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,help:bm_fleet_gps.field_fleet_vehicle_log_services__vehicle_id
+msgid "Xe được phân công cho dịch vụ này"
+msgstr ""
+
+#. module: bm_fleet_gps
+#. odoo-javascript
+#: code:addons/bm_fleet_gps/static/src/xml/journey_map_template.xml:0
+msgid "Xem tất cả"
+msgstr ""
+
+#. module: bm_fleet_gps
+#. odoo-javascript
+#: code:addons/bm_fleet_gps/static/src/xml/journey_map_template.xml:0
+msgid "Xem tất cả xe trên bản đồ"
+msgstr ""
+
+#. module: bm_fleet_gps
+#. odoo-javascript
+#: code:addons/bm_fleet_gps/static/src/xml/journey_map_template.xml:0
+msgid "Xem từng xe"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.res_config_settings_view_form
+msgid "https://iphatnguoi.com/api/check-violation"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model_terms:ir.ui.view,arch_db:bm_fleet_gps.res_config_settings_view_form
+msgid "https://systemroute.adsun.vn/api"
+msgstr ""
+
+#. module: bm_fleet_gps
+#. odoo-javascript
+#: code:addons/bm_fleet_gps/static/src/xml/journey_map_template.xml:0
+msgid "Áp dụng bộ lọc"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields.selection,name:bm_fleet_gps.selection__fleet_vehicle_log_services__state__running
+msgid "Đang chạy"
+msgstr ""
+
+#. module: bm_fleet_gps
+#. odoo-javascript
+#: code:addons/bm_fleet_gps/static/src/xml/journey_map_template.xml:0
+msgid "Đang phát:"
+msgstr ""
+
+#. module: bm_fleet_gps
+#. odoo-javascript
+#: code:addons/bm_fleet_gps/static/src/xml/journey_map_template.xml:0
+msgid "Điểm bắt đầu"
+msgstr ""
+
+#. module: bm_fleet_gps
+#. odoo-javascript
+#: code:addons/bm_fleet_gps/static/src/xml/journey_map_template.xml:0
+msgid "Điểm dừng"
+msgstr ""
+
+#. module: bm_fleet_gps
+#. odoo-javascript
+#: code:addons/bm_fleet_gps/static/src/xml/journey_map_template.xml:0
+msgid "Điểm kết thúc"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields.selection,name:bm_fleet_gps.selection__fleet_vehicle__violation_status__paid
+msgid "Đã xử lý"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_transportation_journey__is_address_synced
+msgid "Đã xử lý địa chỉ"
+msgstr ""
+
+#. module: bm_fleet_gps
+#. odoo-python
+#: code:addons/bm_fleet_gps/models/bm_fleet_vehicle.py:0
+msgid "Đăng ký đặt xe"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_fleet_vehicle__violation_detecting_unit
+msgid "Đơn vị phát hiện"
+msgstr ""
+
+#. module: bm_fleet_gps
+#. odoo-python
+#: code:addons/bm_fleet_gps/wizard/bm_fleet_service_booking_wizard.py:0
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_service_rejection_wizard__request_id
+msgid "Đơn đặt xe"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,help:bm_fleet_gps.field_bm_fleet_service_rejection_wizard__request_id
+msgid "Đơn đặt xe cần từ chối"
+msgstr ""
+
+#. module: bm_fleet_gps
+#. odoo-python
+#: code:addons/bm_fleet_gps/wizard/bm_fleet_service_rejection_wizard.py:0
+msgid "Đơn đặt xe không tồn tại"
+msgstr ""
+
+#. module: bm_fleet_gps
+#. odoo-javascript
+#: code:addons/bm_fleet_gps/static/src/xml/journey_map_template.xml:0
+msgid "Đặt lại (hôm nay)"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:fleet.service.type,name:bm_fleet_gps.fleet_service_type_booking
+msgid "Đặt xe"
+msgstr ""
+
+#. module: bm_fleet_gps
+#. odoo-javascript
+#: code:addons/bm_fleet_gps/static/src/xml/journey_map_template.xml:0
+msgid "Đến ngày giờ:"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_transportation_journey__address
+msgid "Địa chỉ"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model.constraint,message:bm_fleet_gps.constraint_bm_fleet_address_history_name_company_unique
+msgid "Địa chỉ này đã tồn tại trong hệ thống!"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_address_history__name
+msgid "Địa chỉ đầy đủ"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,help:bm_fleet_gps.field_bm_fleet_address_history__name
+msgid "Địa chỉ đầy đủ từ OpenStreetMap hoặc do người dùng nhập"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_fleet_vehicle_log_services__work_location
+msgid "Địa điểm công tác"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_fleet_vehicle__violation_location
+msgid "Địa điểm vi phạm"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_service_booking_wizard__work_departure_location
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_fleet_vehicle_log_services__work_departure_location
+msgid "Địa điểm đi"
+msgstr ""
+
+#. module: bm_fleet_gps
+#: model:ir.model.fields,field_description:bm_fleet_gps.field_bm_fleet_service_booking_wizard__work_location
+msgid "Địa điểm đến"
+msgstr ""
+
+#. module: bm_fleet_gps
+#. odoo-python
+#: code:addons/bm_fleet_gps/models/bm_fleet_vehicle_log_services.py:0
+#: model:ir.model.fields.selection,name:bm_fleet_gps.selection__fleet_vehicle_log_services__state__pending_dispatch
+msgid "Đợi điều xe"
+msgstr ""
+
+#. module: bm_fleet_gps
+#. odoo-javascript
+#: code:addons/bm_fleet_gps/static/src/xml/journey_map_template.xml:0
+msgid "để xem hành trình"
+msgstr ""

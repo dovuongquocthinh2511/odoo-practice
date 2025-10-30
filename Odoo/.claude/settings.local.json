@@ -1,7 +1,26 @@
 {
   "permissions": {
     "allow": [
-      "WebSearch"
+      "mcp__claude-context__search_code",
+      "Read(//c/Users/QUOCTHINH/.claude/**)",
+      "Bash(git log:*)",
+      "mcp__context7__resolve-library-id",
+      "Bash(echo:*)",
+      "Bash(dir:*)",
+      "Bash(findstr:*)",
+      "Bash(python translate_report.py:*)",
+      "Bash(python translate_cleanup.py:*)",
+      "Bash(python translate_script.py:*)",
+      "Bash(del translate_report.py translate_cleanup.py)",
+      "Bash(python -u:*)",
+      "Bash(powershell -Command:*)",
+      "Bash(python3:*)",
+      "mcp__sequential-thinking__sequentialthinking",
+      "Bash(md5sum:*)",
+      "Bash(python fix_mixed_phrases.py:*)",
+      "Bash(python:*)",
+      "Bash(cat:*)",
+      "mcp__claude-context__index_codebase"
     ],
     "deny": [],
     "ask": []

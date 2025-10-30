@@ -24,6 +24,7 @@ class DemoClass(models.Model):
                 record.register_id = record.register_ids[0]
             else:
                 record.register_id = False 
+                
 
     def register_inverse(self):
         for record in self:
@@ -99,4 +100,4 @@ class DemoRegister(models.Model):
     name = fields.Char('Register Name', required=True)
     # Hiện thực field one2one ở model còn lại:
     class_id = fields.Many2one('demo_course.class', string='Class')
-     
+       

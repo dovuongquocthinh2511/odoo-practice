@@ -1,0 +1,13 @@
+# Development environment - exclude migrations
+migrations/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# IDE files
+.idea/
+*.swp
+*.swo
+*~

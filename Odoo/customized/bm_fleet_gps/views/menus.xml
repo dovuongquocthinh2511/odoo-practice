@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- FORCE Override Fleet's Vehicles menu: Base Admin, Sale Admin, and Fleet Manager -->
+    <!-- Using <record> tag to FORCE REPLACE groups (command 6,0) instead of merging -->
+    <!-- This ensures fleet.fleet_group_user is REMOVED from menu -->
+    <record id="fleet.fleet_vehicles" model="ir.ui.menu">
+        <field name="name">Vehicles</field>
+        <field name="parent_id" ref="fleet.menu_root"/>
+        <field name="groups_id" eval="[(6, 0, [ref('base.group_system'), ref('bm_fleet_gps.group_bm_fleet_sale_admin'), ref('fleet.fleet_group_manager')])]"/>
+        <field name="sequence">2</field>
+    </record>
+
+    <!-- FORCE Override Fleet's vehicle list submenu: Base Admin, Sale Admin, and Fleet Manager -->
+    <record id="fleet.fleet_vehicle_menu" model="ir.ui.menu">
+        <field name="name">Fleet</field>
+        <field name="parent_id" ref="fleet.fleet_vehicles"/>
+        <field name="action" ref="fleet.fleet_vehicle_action"/>
+        <field name="groups_id" eval="[(6, 0, [ref('base.group_system'), ref('bm_fleet_gps.group_bm_fleet_sale_admin'), ref('fleet.fleet_group_manager')])]"/>
+        <field name="sequence">0</field>
+    </record>
+
+    <!-- FORCE Override Contracts submenu: Base Admin, Sale Admin, and Fleet Manager -->
+    <record id="fleet.fleet_vehicle_log_contract_menu" model="ir.ui.menu">
+        <field name="action" ref="fleet.fleet_vehicle_log_contract_action"/>
+        <field name="parent_id" ref="fleet.fleet_vehicles"/>
+        <field name="groups_id" eval="[(6, 0, [ref('base.group_system'), ref('bm_fleet_gps.group_bm_fleet_sale_admin'), ref('fleet.fleet_group_manager')])]"/>
+        <field name="sequence">2</field>
+    </record>
+
+    <!-- FORCE Override Services submenu: Base Admin, Sale Admin, and Fleet Manager -->
+    <record id="fleet.fleet_vehicle_log_services_menu" model="ir.ui.menu">
+        <field name="action" ref="fleet.fleet_vehicle_log_services_action"/>
+        <field name="parent_id" ref="fleet.fleet_vehicles"/>
+        <field name="groups_id" eval="[(6, 0, [ref('base.group_system'), ref('bm_fleet_gps.group_bm_fleet_sale_admin'), ref('fleet.fleet_group_manager')])]"/>
+        <field name="sequence">3</field>
+    </record>
+
+    <!-- FORCE Override Odometers submenu: Base Admin, Sale Admin, and Fleet Manager -->
+    <record id="fleet.fleet_vehicle_odometer_menu" model="ir.ui.menu">
+        <field name="action" ref="fleet.fleet_vehicle_odometer_action"/>
+        <field name="parent_id" ref="fleet.fleet_vehicles"/>
+        <field name="groups_id" eval="[(6, 0, [ref('base.group_system'), ref('bm_fleet_gps.group_bm_fleet_sale_admin'), ref('fleet.fleet_group_manager')])]"/>
+        <field name="sequence">10</field>
+    </record>
+
+    <!-- Menu "Booking" for Regular Users and Base Admin -->
+    <record id="menu_fleet_vehicle_services" model="ir.ui.menu">
+        <field name="name">Booking</field>
+        <field name="parent_id" ref="fleet.menu_root"/>
+        <field name="action" ref="fleet_vehicle_services_user_action"/>
+        <field name="groups_id" eval="[(6, 0, [ref('group_bm_fleet_user'), ref('base.group_system')])]"/>
+        <field name="sequence">10</field>
+    </record>
+
+    <!-- Server Action: Booking Wizard (called from view button) -->
+    <record id="action_fleet_service_booking_wizard_menu" model="ir.actions.server">
+        <field name="name">Vehicle Booking Registration</field>
+        <field name="model_id" ref="model_bm_fleet_service_booking_wizard"/>
+        <field name="state">code</field>
+        <field name="code">
+action = {
+    'type': 'ir.actions.act_window',
+    'res_model': 'bm.fleet.service.booking.wizard',
+    'view_mode': 'form',
+    'target': 'new',
+    'view_id': env.ref('bm_fleet_gps.view_fleet_service_booking_wizard_form').id,
+    'context': {},
+}
+        </field>
+    </record>
+
+    <!-- Menu "Journey" for Sale Admin and Base Admin ONLY -->
+    <record id="menu_fleet_journey_map" model="ir.ui.menu">
+        <field name="name">Journey</field>
+        <field name="parent_id" ref="fleet.menu_root"/>
+        <field name="action" ref="fleet_journey_map_action"/>
+        <field name="groups_id" eval="[(6, 0, [ref('base.group_system'), ref('bm_fleet_gps.group_bm_fleet_sale_admin')])]"/>
+        <field name="sequence">45</field>
+    </record>
+
+    <!-- Team Management: Use Fleet's existing Configuration menu - Base Admin ONLY -->
+    <record id="menu_fleet_team" model="ir.ui.menu">
+        <field name="name">Team</field>
+        <field name="parent_id" ref="fleet.fleet_configuration"/>
+        <field name="action" ref="action_fleet_team"/>
+        <field name="groups_id" eval="[(6, 0, [ref('base.group_system')])]"/>
+        <field name="sequence">5</field>
+    </record>
+
+</odoo>

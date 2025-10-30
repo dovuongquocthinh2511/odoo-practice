@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <!-- Journey Map Template -->
+    <t t-name="bm_fleet_gps.JourneyMapTemplate">
+        <div class="fleet_journey_map_container">
+            <div class="row g-0">
+                <!-- Vehicle Selection Sidebar -->
+                <div class="col-md-3 border-end">
+                    <div class="p-3">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="mb-0">
+                                <i class="fa fa-car me-2"></i>
+                                Danh sách xe
+                            </h5>
+                            <button type="button"
+                                    class="btn btn-sm"
+                                    t-att-class="state.viewMode === 'all' ? 'btn-primary' : 'btn-outline-primary'"
+                                    t-on-click="() => this.toggleViewMode()"
+                                    title="Xem tất cả xe trên bản đồ">
+                                <i class="fa fa-map me-1"></i>
+                                <t t-if="state.viewMode === 'single'">Xem tất cả</t>
+                                <t t-else="">Xem từng xe</t>
+                            </button>
+                        </div>
+
+                        <!-- DateTime Filter Section -->
+                        <div class="datetime-filter-section mb-3 p-3 bg-light rounded">
+                            <h6 class="mb-2" style="font-size: 13px; font-weight: 600;">
+                                <i class="fa fa-filter me-1"></i>
+                                Lọc thời gian
+                            </h6>
+
+                            <div class="mb-2">
+                                <label class="form-label small mb-1">Từ ngày giờ:</label>
+                                <input type="datetime-local"
+                                       class="form-control form-control-sm"
+                                       id="filter_start_datetime"
+                                       t-model="state.filterStartDatetime"
+                                       t-on-change="(ev) => this.onFilterDatetimeChange('start', ev.target.value)"/>
+                            </div>
+
+                            <div class="mb-2">
+                                <label class="form-label small mb-1">Đến ngày giờ:</label>
+                                <input type="datetime-local"
+                                       class="form-control form-control-sm"
+                                       id="filter_end_datetime"
+                                       t-model="state.filterEndDatetime"
+                                       t-on-change="(ev) => this.onFilterDatetimeChange('end', ev.target.value)"/>
+                            </div>
+
+                            <div class="d-grid gap-2">
+                                <button type="button"
+                                        class="btn btn-sm btn-primary"
+                                        t-on-click="() => this.applyDatetimeFilter()"
+                                        t-att-disabled="!state.selectedVehicleId || state.loading">
+                                    <i class="fa fa-check me-1"></i>
+                                    Áp dụng bộ lọc
+                                </button>
+                                <button type="button"
+                                        class="btn btn-sm btn-outline-secondary"
+                                        t-on-click="() => this.resetDatetimeFilter()">
+                                    <i class="fa fa-refresh me-1"></i>
+                                    Đặt lại (hôm nay)
+                                </button>
+                            </div>
+
+                            <div class="mt-2 small text-muted" style="font-size: 11px;">
+                                <i class="fa fa-info-circle me-1"></i>
+                                Chọn xe trước, sau đó chọn khoảng thời gian để lọc waypoints
+                            </div>
+                        </div>
+
+                        <div id="vehicle_list_container" class="vehicle-list">
+                            <!-- Populated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Map Container -->
+                <div class="col-md-9">
+                    <div class="p-3">
+                        <!-- Playback Controls -->
+                        <div class="mb-3 p-2 bg-light rounded d-flex align-items-center justify-content-between">
+                            <div class="btn-group" role="group">
+                                <button type="button"
+                                        class="btn btn-sm btn-primary"
+                                        t-on-click="() => this.startAnimation()"
+                                        t-att-disabled="state.isPlaying || state.currentWaypoints.length === 0">
+                                    <i class="fa fa-play me-1"></i>
+                                    Phát
+                                </button>
+                                <button type="button"
+                                        class="btn btn-sm btn-warning"
+                                        t-on-click="() => state.isPaused ? this.resumeAnimation() : this.pauseAnimation()"
+                                        t-att-disabled="!state.isPlaying">
+                                    <i t-attf-class="fa {{state.isPaused ? 'fa-play' : 'fa-pause'}} me-1"></i>
+                                    <t t-if="state.isPaused">Tiếp tục</t>
+                                    <t t-else="">Tạm dừng</t>
+                                </button>
+                                <button type="button"
+                                        class="btn btn-sm btn-danger"
+                                        t-on-click="() => this.stopAnimation()"
+                                        t-att-disabled="!state.isPlaying">
+                                    <i class="fa fa-stop me-1"></i>
+                                    Dừng
+                                </button>
+                            </div>
+
+                            <div class="d-flex align-items-center">
+                                <span class="me-2 small text-muted">Tốc độ:</span>
+                                <div class="btn-group btn-group-sm" role="group">
+                                    <button type="button"
+                                            class="btn btn-outline-secondary"
+                                            t-att-class="{'active': state.playbackSpeed === 0.5}"
+                                            t-on-click="() => this.setPlaybackSpeed(0.5)">
+                                        0.5x
+                                    </button>
+                                    <button type="button"
+                                            class="btn btn-outline-secondary"
+                                            t-att-class="{'active': state.playbackSpeed === 1}"
+                                            t-on-click="() => this.setPlaybackSpeed(1)">
+                                        1x
+                                    </button>
+                                    <button type="button"
+                                            class="btn btn-outline-secondary"
+                                            t-att-class="{'active': state.playbackSpeed === 2}"
+                                            t-on-click="() => this.setPlaybackSpeed(2)">
+                                        2x
+                                    </button>
+                                    <button type="button"
+                                            class="btn btn-outline-secondary"
+                                            t-att-class="{'active': state.playbackSpeed === 5}"
+                                            t-on-click="() => this.setPlaybackSpeed(5)">
+                                        5x
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="small text-muted" t-if="state.currentWaypoints.length > 0">
+                                <i class="fa fa-info-circle me-1"></i>
+                                <t t-if="state.isPlaying">
+                                    Đang phát: <span class="fw-bold"><t t-esc="state.currentWaypointIndex + 1"/> / <t t-esc="state.currentWaypoints.length"/></span>
+                                </t>
+                                <t t-else="">
+                                    Tổng điểm: <span class="fw-bold"><t t-esc="state.currentWaypoints.length"/></span>
+                                </t>
+                            </div>
+                        </div>
+
+                        <!-- Map Canvas -->
+                        <div id="journey_map_container" style="height: 600px; width: 100%; border: 1px solid #dee2e6; border-radius: 4px;">
+                            <!-- Leaflet map renders here -->
+                        </div>
+
+                        <!-- Map Legend - Chú thích bản đồ -->
+                        <div class="mt-3 p-3 bg-light rounded">
+                            <h6 class="mb-2" style="font-size: 14px; font-weight: 600;">
+                                <i class="fa fa-info-circle me-1"></i>
+                                Chú thích màu sắc
+                            </h6>
+                            <div class="row g-2">
+                                <!-- Route Colors - Màu tuyến đường -->
+                                <div class="col-md-6">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <span style="display: inline-block; width: 35px; height: 3px; background-color: #0066ff; opacity: 0.7; margin-right: 10px; border-radius: 1px;"></span>
+                                        <small><strong>Tuyến đường sẽ đi</strong> (màu xanh dương)</small>
+                                    </div>
+                                    <div class="d-flex align-items-center mb-2">
+                                        <span style="display: inline-block; width: 35px; height: 4px; background-color: #00cc44; opacity: 0.85; margin-right: 10px; border-radius: 1px;"></span>
+                                        <small><strong>Tuyến đường đã đi</strong> (màu xanh lá)</small>
+                                    </div>
+                                    <div class="d-flex align-items-center">
+                                        <span style="display: inline-block; width: 35px; height: 2px; background-color: #d0d0d0; opacity: 0.5; margin-right: 10px; border-radius: 1px;"></span>
+                                        <small><strong>Tuyến đang phát</strong> (màu xám nhạt)</small>
+                                    </div>
+                                </div>
+
+                                <!-- Markers - Ký hiệu -->
+                                <div class="col-md-6">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <i class="fa fa-map-marker text-success me-2" style="font-size: 18px;"></i>
+                                        <small>Điểm bắt đầu</small>
+                                    </div>
+                                    <div class="d-flex align-items-center mb-2">
+                                        <i class="fa fa-map-marker text-danger me-2" style="font-size: 18px;"></i>
+                                        <small>Điểm kết thúc</small>
+                                    </div>
+                                    <div class="d-flex align-items-center mb-2">
+                                        <i class="fa fa-circle text-primary me-2" style="font-size: 14px;"></i>
+                                        <small>Điểm dừng</small>
+                                    </div>
+                                    <div class="d-flex align-items-center">
+                                        <i class="fa fa-car me-2" style="font-size: 18px; color: #ff6600;"></i>
+                                        <small>Xe đang di chuyển</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-2 pt-2 border-top">
+                                <small class="text-muted">
+                                    <i class="fa fa-lightbulb-o me-1"></i>
+                                    <strong>Hướng dẫn:</strong> Chọn xe từ danh sách bên trái, sau đó nhấn nút <strong>Phát</strong> để xem hành trình
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+
+</templates>
