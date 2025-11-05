@@ -1,7 +1,8 @@
 /** @odoo-module **/
 
-import { Component, onMounted, onWillUnmount, useState } from "@odoo/owl";
+import { Component, onMounted, onWillUnmount, onWillStart, useState } from "@odoo/owl";
 import { registry } from "@web/core/registry";
+import { rpc } from "@web/core/network/rpc";
 import { useService } from "@web/core/utils/hooks";
 
 /**
@@ -15,9 +16,66 @@ import { useService } from "@web/core/utils/hooks";
  * - Playback controls (play, pause, stop, speed)
  */
 export class FleetJourneyMapWidget extends Component {
+    /**
+     * Validate services and throw descriptive error if not available
+     */
+    validateServices() {
+        // RPC is now imported directly, no service validation needed
+        if (!this.notification) {
+            console.warn('⚠️ Notification service not available, using console fallback');
+            // Fallback: create a simple notification method
+            this.notification = {
+                add: (message, options) => {
+                    console.log(`🔔 ${options.type?.toUpperCase() || 'INFO'}: ${message}`);
+                }
+            };
+        }
+        if (!this.orm) {
+            console.warn('⚠️ ORM service not available, some operations may be limited');
+        }
+        return true;
+    }
+
+    /**
+     * Test ADSUN API connectivity
+     */
+    async testAdsunConnection() {
+        console.log('🧪 Testing ADSUN API connectivity...');
+        try {
+            // Validate services are available before making RPC call
+            this.validateServices();
+            const response = await rpc('/fleet/gps/test-connection', {});
+            console.log('🔍 Connection test result:', response);
+
+            if (response.success) {
+                this.notification.add(
+                    `✅ ADSUN API connected successfully to ${response.api_url}`,
+                    { type: 'success' }
+                );
+            } else {
+                this.notification.add(
+                    `❌ ADSUN API connection failed: ${response.error} (Stage: ${response.test_stage})`,
+                    { type: 'danger' }
+                );
+            }
+
+            return response;
+        } catch (error) {
+            console.error('💥 Connection test failed:', error);
+            this.env.services.notification.add(
+                `Connection test failed: ${error.message}`,
+                { type: 'danger' }
+            );
+            return { success: false, error: error.message };
+        }
+    }
+
     setup() {
+        // ✅ CORRECT - Use useService() hooks for available services only
         this.orm = useService("orm");
         this.notification = useService("notification");
+        this.action = useService("action");
+        // Note: RPC is imported directly, not injected as service
 
         // Extract vehicle filter from action context if provided (from smart button)
         const actionContext = this.props.action?.context || {};
@@ -58,12 +116,24 @@ export class FleetJourneyMapWidget extends Component {
             routePolyline: null,
             traveledPathPolyline: null, // Đường đã đi (màu đỏ)
             currentWaypoints: [],
+            currentDataSource: null, // Track if data is from 'database' or 'api'
             routedPathCache: [], // Cache for routed path coordinates
+        });
+
+        // Initialize component with proper lifecycle hook
+        onWillStart(async () => {
+            // Validate services and perform initial setup
+            this.validateServices();
+            console.log('🚀 Fleet Journey Map initialized with proper RPC service');
         });
 
         onMounted(async () => {
             await this.loadVehicles();
             this.initializeMap();
+
+            // Make test method available in console for debugging
+            window.testAdsunConnection = () => this.testAdsunConnection();
+            console.log('🔧 Debug: testAdsunConnection() available in console');
 
             // If vehicle filter was provided (from smart button), auto-load its journey
             if (this.vehicleFilterId && this.state.selectedVehicleId) {
@@ -147,24 +217,7 @@ export class FleetJourneyMapWidget extends Component {
         return `${year}-${month}-${day}T${hours}:${minutes}`;
     }
 
-    /**
-     * Convert Vietnam local time to UTC for backend queries
-     * The datetime-local input treats values as local time, but we need to
-     * interpret them as Vietnam time (UTC+7) and convert to UTC for database queries.
-     *
-     * @param {Date} vietnamDate - Date object representing Vietnam local time
-     * @returns {Date} - UTC Date object (Vietnam time - 7 hours)
-     *
-     * Example:
-     *   Input: 09:00 Vietnam time → Output: 02:00 UTC
-     *   Backend searches for timestamps >= 02:00 UTC
-     *   Display shows: 02:00 UTC + 7 hours = 09:00 Vietnam time
-     */
-    vietnamTimeToUTC(vietnamDate) {
-        // Subtract 7 hours to convert Vietnam time (UTC+7) to UTC
-        return new Date(vietnamDate.getTime() - (7 * 60 * 60 * 1000));
-    }
-
+  
     /**
      * Handle datetime filter change
      */
@@ -181,30 +234,27 @@ export class FleetJourneyMapWidget extends Component {
      */
     async applyDatetimeFilter() {
         if (!this.state.selectedVehicleId) {
-            this.notification.add('Vui lòng chọn xe trước', { type: 'warning' });
+            this.env.services.notification.add('Vui lòng chọn xe trước', { type: 'warning' });
             return;
         }
 
         if (!this.state.filterStartDatetime || !this.state.filterEndDatetime) {
-            this.notification.add('Vui lòng chọn thời gian bắt đầu và kết thúc', { type: 'warning' });
+            this.env.services.notification.add('Vui lòng chọn thời gian bắt đầu và kết thúc', { type: 'warning' });
             return;
         }
 
-        // Parse datetime-local input as Vietnam time, then convert to UTC for backend query
-        // User input: 09:00 Vietnam time → Convert to UTC: 02:00 UTC
-        const startDateLocal = new Date(this.state.filterStartDatetime);
-        const endDateLocal = new Date(this.state.filterEndDatetime);
+        // Parse datetime-local input directly as UTC for database queries
+        // The datetime-local input values should be treated as UTC timestamps
+        // since GPS data is stored in UTC in the database
+        const startDate = new Date(this.state.filterStartDatetime);
+        const endDate = new Date(this.state.filterEndDatetime);
 
-        if (startDateLocal >= endDateLocal) {
-            this.notification.add('Thời gian bắt đầu phải nhỏ hơn thời gian kết thúc', { type: 'danger' });
+        if (startDate >= endDate) {
+            this.env.services.notification.add('Thời gian bắt đầu phải nhỏ hơn thời gian kết thúc', { type: 'danger' });
             return;
         }
 
-        // Convert Vietnam time to UTC for database queries
-        const startDate = this.vietnamTimeToUTC(startDateLocal);
-        const endDate = this.vietnamTimeToUTC(endDateLocal);
-
-        // Reload journey with filtered datetime range (now in UTC)
+        // Use the datetime values directly for database queries (they're treated as UTC)
         await this.loadAndRenderJourneyWithDatetimeFilter(this.state.selectedVehicleId, startDate, endDate);
     }
 
@@ -227,8 +277,12 @@ export class FleetJourneyMapWidget extends Component {
         const mapContainer = document.getElementById('journey_map_container');
         if (!mapContainer) {
             console.error('Map container not found');
+            this.env.services.notification.add('Lỗi khởi tạo bản đồ: không tìm thấy container', { type: 'danger' });
             return;
         }
+
+        // Clear any existing map content
+        mapContainer.innerHTML = '';
 
         if (typeof L === 'undefined') {
             console.error('Leaflet library not loaded. Retrying in 500ms...');
@@ -260,10 +314,9 @@ export class FleetJourneyMapWidget extends Component {
                 this.state.mapTransforming = false;
             });
 
-            console.log('Leaflet map initialized successfully');
-        } catch (error) {
+          } catch (error) {
             console.error('Error initializing map:', error);
-            this.notification.add('Lỗi khởi tạo bản đồ', { type: 'danger' });
+            this.env.services.notification.add('Lỗi khởi tạo bản đồ', { type: 'danger' });
         }
     }
 
@@ -280,8 +333,7 @@ export class FleetJourneyMapWidget extends Component {
             if (this.vehicleFilterId) {
                 // IMPORTANT: When opened from smart button, only show the filtered vehicle
                 domain = [['id', '=', this.vehicleFilterId]];
-                console.log(`Loading single vehicle ${this.vehicleFilterId} from context filter`);
-            }
+              }
             // When opened from menu (no filter), domain stays empty to load all vehicles
 
             const vehicles = await this.orm.searchRead(
@@ -302,10 +354,10 @@ export class FleetJourneyMapWidget extends Component {
             this.renderVehicleList();
 
             const withGPS = vehicles.filter(v => v.adsun_device_serial_number).length;
-            console.log(`Loaded ${vehicles.length} vehicles (${withGPS} with GPS)`);
-        } catch (error) {
+
+            } catch (error) {
             console.error('Error loading vehicles:', error);
-            this.notification.add('Lỗi tải danh sách xe', { type: 'danger' });
+            this.env.services.notification.add('Lỗi tải danh sách xe', { type: 'danger' });
         } finally {
             this.state.loading = false;
         }
@@ -360,7 +412,7 @@ export class FleetJourneyMapWidget extends Component {
 
             // Auto-highlight if this is the selected vehicle from context filter
             if (vehicleId === this.state.selectedVehicleId) {
-                item.classList.add('bg-primary', 'text-white');
+                item.classList.add('vehicle-selected');
             }
 
             item.addEventListener('click', (e) => {
@@ -394,7 +446,7 @@ export class FleetJourneyMapWidget extends Component {
             if (this.state.journeyLayer) {
                 this.state.journeyLayer.clearLayers();
             }
-            this.notification.add('Đã chuyển sang chế độ xem từng xe', { type: 'info' });
+            this.env.services.notification.add('Đã chuyển sang chế độ xem từng xe', { type: 'info' });
         }
     }
 
@@ -424,7 +476,7 @@ export class FleetJourneyMapWidget extends Component {
             );
 
             if (vehicles.length === 0) {
-                this.notification.add('Không có xe nào có GPS', { type: 'warning' });
+                this.env.services.notification.add('Không có xe nào có GPS', { type: 'warning' });
                 return;
             }
 
@@ -497,14 +549,14 @@ export class FleetJourneyMapWidget extends Component {
                 this.state.map.fitBounds(bounds, { padding: [50, 50] });
             }
 
-            this.notification.add(
+            this.env.services.notification.add(
                 `Hiển thị ${allVehiclesData.length} xe trên bản đồ`,
                 { type: 'success' }
             );
 
         } catch (error) {
             console.error('Error showing all vehicles:', error);
-            this.notification.add('Lỗi hiển thị tất cả xe', { type: 'danger' });
+            this.env.services.notification.add('Lỗi hiển thị tất cả xe', { type: 'danger' });
         } finally {
             this.state.loading = false;
         }
@@ -514,6 +566,18 @@ export class FleetJourneyMapWidget extends Component {
      * Select vehicle and load journey
      */
     async selectVehicle(vehicleId) {
+        // Validate vehicle exists and has GPS device
+        const vehicle = this.state.vehicles.find(v => v.id === vehicleId);
+        if (!vehicle) {
+            this.env.services.notification.add('Không tìm thấy thông tin xe', { type: 'danger' });
+            return;
+        }
+
+        if (!vehicle.adsun_device_serial_number) {
+            this.env.services.notification.add(`Xe "${vehicle.name}" chưa được cấu hình thiết bị GPS`, { type: 'warning' });
+            return;
+        }
+
         // Switch to single vehicle mode if in all vehicles mode
         if (this.state.viewMode === 'all') {
             this.state.viewMode = 'single';
@@ -532,13 +596,13 @@ export class FleetJourneyMapWidget extends Component {
 
         // Update UI
         document.querySelectorAll('.vehicle-item').forEach(item => {
-            item.classList.remove('bg-primary', 'text-white');
+            item.classList.remove('vehicle-selected');
             item.style.backgroundColor = '';
         });
 
         const selectedItem = document.querySelector(`[data-vehicle-id="${vehicleId}"]`);
         if (selectedItem) {
-            selectedItem.classList.add('bg-primary', 'text-white');
+            selectedItem.classList.add('vehicle-selected');
         }
 
         this.state.selectedVehicleId = vehicleId;
@@ -548,17 +612,38 @@ export class FleetJourneyMapWidget extends Component {
     }
 
     /**
-     * Load waypoints and render journey on map
+     * Load waypoints from ADSUN API and render journey on map
      */
     async loadAndRenderJourney(vehicleId) {
         if (!this.state.map) {
-            this.notification.add('Bản đồ chưa sẵn sàng', { type: 'warning' });
+            this.env.services.notification.add('Bản đồ chưa sẵn sàng', { type: 'warning' });
             return;
         }
 
         try {
             this.state.loading = true;
 
+            // Get vehicle information to find device serial number
+            const vehicles = await this.orm.searchRead(
+                "fleet.vehicle",
+                [["id", "=", vehicleId]],
+                ["id", "name", "license_plate", "adsun_device_serial_number"],
+                { limit: 1 }
+            );
+
+            if (vehicles.length === 0 || !vehicles[0].adsun_device_serial_number) {
+                this.env.services.notification.add(
+                    'Xe này không có thiết bị GPS',
+                    { type: 'warning' }
+                );
+                this.state.journeyLayer.clearLayers();
+                return;
+            }
+
+            const vehicle = vehicles[0];
+            const deviceSerial = vehicle.adsun_device_serial_number;
+
+            // Prepare time range for ADSUN API
             const selectedDate = new Date(this.state.selectedDate);
             const startOfDay = new Date(selectedDate);
             startOfDay.setHours(0, 0, 0, 0);
@@ -566,21 +651,60 @@ export class FleetJourneyMapWidget extends Component {
             const endOfDay = new Date(selectedDate);
             endOfDay.setHours(23, 59, 59, 999);
 
-            const waypoints = await this.orm.searchRead(
-                "bm.fleet.transportation.journey",
-                [
-                    ["vehicle_id", "=", vehicleId],
-                    ["timestamp", ">=", startOfDay.toISOString()],
-                    ["timestamp", "<=", endOfDay.toISOString()],
-                    ["latitude", "!=", 0],
-                    ["longitude", "!=", 0],
-                ],
-                ["latitude", "longitude", "timestamp", "speed", "machine_status", "address"],
-                { order: "timestamp asc", limit: 5000 }
-            );
+            // Format times for ADSUN API (YYYY-MM-DD HH:MM:SS)
+            const formatTimeForAPI = (date) => {
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const day = String(date.getDate()).padStart(2, '0');
+                const hours = String(date.getHours()).padStart(2, '0');
+                const minutes = String(date.getMinutes()).padStart(2, '0');
+                const seconds = String(date.getSeconds()).padStart(2, '0');
+                return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+            };
+
+            const startTime = formatTimeForAPI(startOfDay);
+            const endTime = formatTimeForAPI(endOfDay);
+
+            // Call ADSUN API via RPC
+            console.log('🚀 Calling ADSUN API with:', {
+                vehicle_id: vehicleId,
+                device_serial: deviceSerial,
+                start_time: startTime,
+                end_time: endTime
+            });
+
+            // Validate services are available before making RPC call
+            this.validateServices();
+            const response = await rpc('/fleet/gps/journey/history', {
+                vehicle_id: vehicleId,
+                device_serial: deviceSerial,
+                start_time: startTime,
+                end_time: endTime
+            });
+
+            console.log('📥 ADSUN API Response:', {
+                success: response.success,
+                error: response.error,
+                waypoints_count: response.waypoints?.length || 0,
+                full_response: response
+            });
+
+            if (!response.success) {
+                const errorMsg = response.error || 'Unknown error';
+                console.error('❌ ADSUN API Error:', errorMsg);
+                this.env.services.notification.add(
+                    `Lỗi tải dữ liệu từ ADSUN: ${errorMsg}`,
+                    { type: 'danger' }
+                );
+                this.state.journeyLayer.clearLayers();
+                return;
+            }
+
+            const waypoints = response.waypoints || [];
+            const dataSource = response.source || 'api';
 
             if (waypoints.length === 0) {
-                this.notification.add(
+                this.env.services.notification.add(
                     `Không có dữ liệu hành trình cho xe này vào ngày ${this.state.selectedDate}`,
                     { type: 'warning' }
                 );
@@ -588,73 +712,138 @@ export class FleetJourneyMapWidget extends Component {
                 return;
             }
 
-            console.log(`Loaded ${waypoints.length} waypoints for vehicle ${vehicleId}`);
-
             // Store waypoints for animation
             this.state.currentWaypoints = waypoints;
+            this.state.currentDataSource = dataSource;
 
             this.renderJourneyOnMap(waypoints);
 
-            this.notification.add(
-                `Đã tải ${waypoints.length} điểm GPS`,
-                { type: 'success' }
-            );
+            // Show appropriate notification based on data source
+            if (dataSource === 'database') {
+                this.env.services.notification.add(
+                    `✅ Đã tải ${waypoints.length} điểm GPS từ database (hôm nay)`,
+                    { type: 'success' }
+                );
+            } else {
+                this.env.services.notification.add(
+                    `🌐 Đã tải ${waypoints.length} điểm GPS từ ADSUN API (${dataSource})`,
+                    { type: 'info' }
+                );
+            }
 
         } catch (error) {
-            console.error('Error loading journey:', error);
-            this.notification.add('Lỗi tải dữ liệu hành trình', { type: 'danger' });
+            console.error('💥 Network/RPC Error loading journey from ADSUN API:', {
+                error_message: error.message,
+                error_stack: error.stack,
+                error_name: error.name,
+                error_data: error.data || 'No additional error data'
+            });
+            this.env.services.notification.add(`Lỗi tải dữ liệu hành trình từ ADSUN: ${error.message || 'Network error'}`, { type: 'danger' });
         } finally {
             this.state.loading = false;
         }
     }
 
     /**
-     * Load waypoints with custom datetime filter and render journey on map
+     * Load waypoints from ADSUN API with custom datetime filter and render journey on map
      */
     async loadAndRenderJourneyWithDatetimeFilter(vehicleId, startDate, endDate) {
         if (!this.state.map) {
-            this.notification.add('Bản đồ chưa sẵn sàng', { type: 'warning' });
+            this.env.services.notification.add('Bản đồ chưa sẵn sàng', { type: 'warning' });
             return;
         }
 
         try {
             this.state.loading = true;
 
-            const waypoints = await this.orm.searchRead(
-                "bm.fleet.transportation.journey",
-                [
-                    ["vehicle_id", "=", vehicleId],
-                    ["timestamp", ">=", startDate.toISOString()],
-                    ["timestamp", "<=", endDate.toISOString()],
-                    ["latitude", "!=", 0],
-                    ["longitude", "!=", 0],
-                ],
-                ["latitude", "longitude", "timestamp", "speed", "machine_status", "address"],
-                { order: "timestamp asc", limit: 5000 }
+            // Get vehicle information to find device serial number
+            const vehicles = await this.orm.searchRead(
+                "fleet.vehicle",
+                [["id", "=", vehicleId]],
+                ["id", "name", "license_plate", "adsun_device_serial_number"],
+                { limit: 1 }
             );
+
+            if (vehicles.length === 0 || !vehicles[0].adsun_device_serial_number) {
+                this.env.services.notification.add(
+                    'Xe này không có thiết bị GPS',
+                    { type: 'warning' }
+                );
+                this.state.journeyLayer.clearLayers();
+                return;
+            }
+
+            const vehicle = vehicles[0];
+            const deviceSerial = vehicle.adsun_device_serial_number;
+
+            // Format times for ADSUN API (YYYY-MM-DD HH:MM:SS)
+            const formatTimeForAPI = (date) => {
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const day = String(date.getDate()).padStart(2, '0');
+                const hours = String(date.getHours()).padStart(2, '0');
+                const minutes = String(date.getMinutes()).padStart(2, '0');
+                const seconds = String(date.getSeconds()).padStart(2, '0');
+                return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+            };
+
+            const startTime = formatTimeForAPI(startDate);
+            const endTime = formatTimeForAPI(endDate);
+
+            // Call ADSUN API via RPC
+            console.log('🚀 Calling ADSUN API with:', {
+                vehicle_id: vehicleId,
+                device_serial: deviceSerial,
+                start_time: startTime,
+                end_time: endTime
+            });
+
+            // Validate services are available before making RPC call
+            this.validateServices();
+            const response = await rpc('/fleet/gps/journey/history', {
+                vehicle_id: vehicleId,
+                device_serial: deviceSerial,
+                start_time: startTime,
+                end_time: endTime
+            });
+
+            console.log('📥 ADSUN API Response:', {
+                success: response.success,
+                error: response.error,
+                waypoints_count: response.waypoints?.length || 0,
+                full_response: response
+            });
+
+            if (!response.success) {
+                const errorMsg = response.error || 'Unknown error';
+                console.error('❌ ADSUN API Error:', errorMsg);
+                this.env.services.notification.add(
+                    `Lỗi tải dữ liệu từ ADSUN: ${errorMsg}`,
+                    { type: 'danger' }
+                );
+                this.state.journeyLayer.clearLayers();
+                return;
+            }
+
+            const waypoints = response.waypoints || [];
 
             if (waypoints.length === 0) {
                 const startStr = this.formatDatetimeDisplay(startDate);
                 const endStr = this.formatDatetimeDisplay(endDate);
 
                 // Try to get latest location if no waypoints in range
-                const latestWaypoint = await this.orm.searchRead(
-                    "bm.fleet.transportation.journey",
-                    [
-                        ["vehicle_id", "=", vehicleId],
-                        ["latitude", "!=", 0],
-                        ["longitude", "!=", 0],
-                    ],
-                    ["latitude", "longitude", "timestamp", "speed", "machine_status", "address"],
-                    { order: "timestamp desc", limit: 1 }
-                );
+                this.validateServices();
+                const latestResponse = await rpc('/fleet/gps/journey/latest-position', {
+                    vehicle_id: vehicleId,
+                    device_serial: deviceSerial
+                });
 
-                if (latestWaypoint.length > 0) {
-                    const location = latestWaypoint[0];
-                    const timestamp = new Date(location.timestamp);
+                if (latestResponse.success && latestResponse.waypoint) {
+                    const location = latestResponse.waypoint;
+                    const timestamp = location.timestamp;
 
-                    this.notification.add(
-                        `Không có dữ liệu hành trình từ ${startStr} đến ${endStr}. Hiển thị vị trí mới nhất: ${this.formatDatetimeDisplay(timestamp)}`,
+                    this.env.services.notification.add(
+                        `Không có dữ liệu hành trình từ ${startStr} đến ${endStr}. Hiển thị vị trí mới nhất: ${this.formatDatetimeDisplay(new Date(timestamp))}`,
                         { type: 'info' }
                     );
 
@@ -674,7 +863,7 @@ export class FleetJourneyMapWidget extends Component {
                     // Add popup with location info
                     marker.bindPopup(`
                         <b>Vị trí mới nhất</b><br/>
-                        Thời gian: ${this.formatDatetimeDisplay(timestamp)}<br/>
+                        Thời gian: ${this.formatTime(timestamp)}<br/>
                         ${location.address || 'Không có địa chỉ'}<br/>
                         Tốc độ: ${location.speed || 0} km/h
                     `).openPopup();
@@ -684,7 +873,7 @@ export class FleetJourneyMapWidget extends Component {
 
                     return;
                 } else {
-                    this.notification.add(
+                    this.env.services.notification.add(
                         `Không có dữ liệu GPS cho xe này`,
                         { type: 'warning' }
                     );
@@ -693,21 +882,28 @@ export class FleetJourneyMapWidget extends Component {
                 }
             }
 
-            console.log(`Loaded ${waypoints.length} waypoints for vehicle ${vehicleId} with datetime filter`);
-
             // Store waypoints for animation
             this.state.currentWaypoints = waypoints;
+            this.state.currentDataSource = response.source || 'api';
 
             this.renderJourneyOnMap(waypoints);
 
-            this.notification.add(
-                `Đã tải ${waypoints.length} điểm GPS trong khoảng thời gian đã chọn`,
-                { type: 'success' }
-            );
+            // Show appropriate notification based on data source
+            if (response.source === 'database') {
+                this.env.services.notification.add(
+                    `✅ Đã tải ${waypoints.length} điểm GPS từ database (dữ liệu hôm nay)`,
+                    { type: 'success' }
+                );
+            } else {
+                this.env.services.notification.add(
+                    `🌐 Đã tải ${waypoints.length} điểm GPS từ ADSUN API (khoảng thời gian đã chọn)`,
+                    { type: 'info' }
+                );
+            }
 
         } catch (error) {
-            console.error('Error loading journey with datetime filter:', error);
-            this.notification.add('Lỗi tải dữ liệu hành trình', { type: 'danger' });
+            console.error('Error loading journey from ADSUN API with datetime filter:', error);
+            this.env.services.notification.add('Lỗi tải dữ liệu hành trình từ ADSUN', { type: 'danger' });
         } finally {
             this.state.loading = false;
         }
@@ -746,12 +942,10 @@ export class FleetJourneyMapWidget extends Component {
         // Cache routed path for animation, fallback to direct waypoints if OSRM fails
         if (routedCoordinates.length > 0) {
             this.state.routedPathCache = routedCoordinates;
-            console.log(`Using OSRM routed path with ${routedCoordinates.length} points`);
-        } else {
+              } else {
             // Fallback: use direct waypoint connection
             this.state.routedPathCache = waypoints.map(wp => [wp.latitude, wp.longitude]);
-            console.log(`OSRM failed, using direct waypoint path with ${waypoints.length} points`);
-        }
+                }
 
         // Draw journey path (blue line - route to be traveled / chưa đi)
         // Màu xanh dương đậm để phân biệt với đường đã đi
@@ -840,8 +1034,7 @@ export class FleetJourneyMapWidget extends Component {
         // Fit map to show all waypoints
         this.state.map.fitBounds(this.state.routePolyline.getBounds(), { padding: [50, 50] });
 
-        console.log(`Rendered journey: ${waypoints.length} waypoints, ${this.state.routedPathCache.length} route points, ${sampledStops.length} stop markers`);
-    }
+        }
 
     /**
      * Create custom marker icon
@@ -928,7 +1121,7 @@ export class FleetJourneyMapWidget extends Component {
      */
     startAnimation() {
         if (this.state.currentWaypoints.length === 0 || this.state.routedPathCache.length === 0) {
-            this.notification.add('Chưa có dữ liệu hành trình để phát', { type: 'warning' });
+            this.env.services.notification.add('Chưa có dữ liệu hành trình để phát', { type: 'warning' });
             return;
         }
 
@@ -979,25 +1172,10 @@ export class FleetJourneyMapWidget extends Component {
         // Start animation loop
         this.animateVehicle();
 
-        this.notification.add('Bắt đầu phát hành trình', { type: 'info' });
+        this.env.services.notification.add('Bắt đầu phát hành trình', { type: 'info' });
     }
 
-    /**
-     * Calculate bearing/angle between two points
-     */
-    calculateBearing(lat1, lng1, lat2, lng2) {
-        const dLng = (lng2 - lng1) * Math.PI / 180;
-        const lat1Rad = lat1 * Math.PI / 180;
-        const lat2Rad = lat2 * Math.PI / 180;
-
-        const y = Math.sin(dLng) * Math.cos(lat2Rad);
-        const x = Math.cos(lat1Rad) * Math.sin(lat2Rad) -
-                  Math.sin(lat1Rad) * Math.cos(lat2Rad) * Math.cos(dLng);
-
-        let bearing = Math.atan2(y, x) * 180 / Math.PI;
-        return (bearing + 360) % 360; // Normalize to 0-360
-    }
-
+  
     /**
      * Animate vehicle movement
      */
@@ -1014,16 +1192,15 @@ export class FleetJourneyMapWidget extends Component {
         if (!routedPath || routedPath.length === 0) {
             console.warn('No routed path available for animation');
             this.stopAnimation();
-            this.notification.add('Không có tuyến đường để phát', { type: 'warning' });
+            this.env.services.notification.add('Không có tuyến đường để phát', { type: 'warning' });
             return;
         }
 
         if (currentIndex >= routedPath.length - 1) {
             // Reached the end - stop completely, don't loop or continue
             this.stopAnimation();
-            this.notification.add('Hoàn thành hành trình - Đã đến điểm cuối', { type: 'success' });
-            console.log(`Animation completed at waypoint ${currentIndex + 1}/${routedPath.length}`);
-            return;
+            this.env.services.notification.add('Hoàn thành hành trình - Đã đến điểm cuối', { type: 'success' });
+                  return;
         }
 
         const nextIndex = currentIndex + 1;
@@ -1034,7 +1211,7 @@ export class FleetJourneyMapWidget extends Component {
         if (!currentPos || !nextPos) {
             console.warn('Invalid position data at index', currentIndex);
             this.stopAnimation();
-            this.notification.add('Lỗi dữ liệu vị trí', { type: 'danger' });
+            this.env.services.notification.add('Lỗi dữ liệu vị trí', { type: 'danger' });
             return;
         }
 
@@ -1114,9 +1291,8 @@ export class FleetJourneyMapWidget extends Component {
                 if (nextIndex >= routedPath.length - 1) {
                     // This is the last waypoint - complete animation
                     this.stopAnimation();
-                    this.notification.add('Hoàn thành hành trình', { type: 'success' });
-                    console.log(`Animation completed at final waypoint ${nextIndex + 1}/${routedPath.length}`);
-                } else {
+                    this.env.services.notification.add('Hoàn thành hành trình', { type: 'success' });
+                    } else {
                     // Continue to next segment
                     this.state.animationFrameId = setTimeout(() => this.animateVehicle(), stepDelay);
                 }
@@ -1135,7 +1311,7 @@ export class FleetJourneyMapWidget extends Component {
             clearTimeout(this.state.animationFrameId);
             this.state.animationFrameId = null;
         }
-        this.notification.add('Tạm dừng phát', { type: 'info' });
+        this.env.services.notification.add('Tạm dừng phát', { type: 'info' });
     }
 
     /**
@@ -1146,7 +1322,7 @@ export class FleetJourneyMapWidget extends Component {
 
         this.state.isPaused = false;
         this.animateVehicle();
-        this.notification.add('Tiếp tục phát', { type: 'info' });
+        this.env.services.notification.add('Tiếp tục phát', { type: 'info' });
     }
 
     /**
@@ -1210,7 +1386,7 @@ export class FleetJourneyMapWidget extends Component {
      */
     setPlaybackSpeed(speed) {
         this.state.playbackSpeed = speed;
-        this.notification.add(`Tốc độ phát: ${speed}x`, { type: 'info' });
+        this.env.services.notification.add(`Tốc độ phát: ${speed}x`, { type: 'info' });
     }
 
     /**
@@ -1383,29 +1559,44 @@ export class FleetJourneyMapWidget extends Component {
     }
 
     /**
-     * Format timestamp to Vietnam timezone (UTC+7)
-     * IMPORTANT: Match the exact format used in waypoint list display
+     * Format timestamp for display
+     *
+     * ADSUN API returns properly formatted timestamps
+     * No UTC conversion needed - API handles timezone correctly
      */
     formatTime(timestamp) {
         if (!timestamp) return '';
 
-        // Odoo returns datetime as "YYYY-MM-DD HH:MM:SS" (space separator, no timezone)
-        // Browsers parse this as LOCAL time, NOT UTC
-        // We need to force UTC interpretation by adding 'Z' suffix
-        const utcDate = new Date(timestamp + 'Z');
+        // ADSUN API returns properly formatted datetime that can be parsed directly
+        // No UTC conversion needed - ADSUN handles timezone correctly
+        const date = new Date(timestamp);
 
-        // Manual conversion to Vietnam timezone (UTC+7)
-        // Add 7 hours to UTC time
-        const vietnamTime = new Date(utcDate.getTime() + (7 * 60 * 60 * 1000));
-
-        const day = String(vietnamTime.getUTCDate()).padStart(2, '0');
-        const month = String(vietnamTime.getUTCMonth() + 1).padStart(2, '0');
-        const year = vietnamTime.getUTCFullYear();
-        const hours = String(vietnamTime.getUTCHours()).padStart(2, '0');
-        const minutes = String(vietnamTime.getUTCMinutes()).padStart(2, '0');
-        const seconds = String(vietnamTime.getUTCSeconds()).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const year = date.getFullYear();
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        const seconds = String(date.getSeconds()).padStart(2, '0');
 
         return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
+    }
+
+    // Event handler methods for template
+    toggleViewMode() {
+        this.state.viewMode = this.state.viewMode === 'single' ? 'all' : 'single';
+    }
+
+    toggleAnimation() {
+        if (this.state.isPaused) {
+            this.resumeAnimation();
+        } else {
+            this.pauseAnimation();
+        }
+    }
+
+    setPlaybackSpeed(ev) {
+        const speed = parseFloat(ev.target.dataset.speed);
+        this.state.playbackSpeed = speed;
     }
 }
 

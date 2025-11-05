@@ -54,6 +54,9 @@
     'external_dependencies': {
         'python': ['requests'],
     },
+    'py_files': [
+        'models',
+    ],
     'data': [
         # Security - Groups must load FIRST before rules and access rights
         'security/bm_fleet_gps_groups.xml',

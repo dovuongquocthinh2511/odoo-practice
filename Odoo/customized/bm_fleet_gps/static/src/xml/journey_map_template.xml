@@ -16,7 +16,7 @@
                             <button type="button"
                                     class="btn btn-sm"
                                     t-att-class="state.viewMode === 'all' ? 'btn-primary' : 'btn-outline-primary'"
-                                    t-on-click="() => this.toggleViewMode()"
+                                    t-on-click="toggleViewMode"
                                     title="Xem tất cả xe trên bản đồ">
                                 <i class="fa fa-map me-1"></i>
                                 <t t-if="state.viewMode === 'single'">Xem tất cả</t>
@@ -52,14 +52,14 @@
                             <div class="d-grid gap-2">
                                 <button type="button"
                                         class="btn btn-sm btn-primary"
-                                        t-on-click="() => this.applyDatetimeFilter()"
+                                        t-on-click="applyDatetimeFilter"
                                         t-att-disabled="!state.selectedVehicleId || state.loading">
                                     <i class="fa fa-check me-1"></i>
                                     Áp dụng bộ lọc
                                 </button>
                                 <button type="button"
                                         class="btn btn-sm btn-outline-secondary"
-                                        t-on-click="() => this.resetDatetimeFilter()">
+                                        t-on-click="resetDatetimeFilter">
                                     <i class="fa fa-refresh me-1"></i>
                                     Đặt lại (hôm nay)
                                 </button>
@@ -85,14 +85,14 @@
                             <div class="btn-group" role="group">
                                 <button type="button"
                                         class="btn btn-sm btn-primary"
-                                        t-on-click="() => this.startAnimation()"
+                                        t-on-click="startAnimation"
                                         t-att-disabled="state.isPlaying || state.currentWaypoints.length === 0">
                                     <i class="fa fa-play me-1"></i>
                                     Phát
                                 </button>
                                 <button type="button"
                                         class="btn btn-sm btn-warning"
-                                        t-on-click="() => state.isPaused ? this.resumeAnimation() : this.pauseAnimation()"
+                                        t-on-click="toggleAnimation"
                                         t-att-disabled="!state.isPlaying">
                                     <i t-attf-class="fa {{state.isPaused ? 'fa-play' : 'fa-pause'}} me-1"></i>
                                     <t t-if="state.isPaused">Tiếp tục</t>
@@ -100,7 +100,7 @@
                                 </button>
                                 <button type="button"
                                         class="btn btn-sm btn-danger"
-                                        t-on-click="() => this.stopAnimation()"
+                                        t-on-click="stopAnimation"
                                         t-att-disabled="!state.isPlaying">
                                     <i class="fa fa-stop me-1"></i>
                                     Dừng
@@ -113,25 +113,25 @@
                                     <button type="button"
                                             class="btn btn-outline-secondary"
                                             t-att-class="{'active': state.playbackSpeed === 0.5}"
-                                            t-on-click="() => this.setPlaybackSpeed(0.5)">
+                                            t-on-click="setPlaybackSpeed" t-att-data-speed="0.5">
                                         0.5x
                                     </button>
                                     <button type="button"
                                             class="btn btn-outline-secondary"
                                             t-att-class="{'active': state.playbackSpeed === 1}"
-                                            t-on-click="() => this.setPlaybackSpeed(1)">
+                                            t-on-click="setPlaybackSpeed" t-att-data-speed="1">
                                         1x
                                     </button>
                                     <button type="button"
                                             class="btn btn-outline-secondary"
                                             t-att-class="{'active': state.playbackSpeed === 2}"
-                                            t-on-click="() => this.setPlaybackSpeed(2)">
+                                            t-on-click="setPlaybackSpeed" t-att-data-speed="2">
                                         2x
                                     </button>
                                     <button type="button"
                                             class="btn btn-outline-secondary"
                                             t-att-class="{'active': state.playbackSpeed === 5}"
-                                            t-on-click="() => this.setPlaybackSpeed(5)">
+                                            t-on-click="setPlaybackSpeed" t-att-data-speed="5">
                                         5x
                                     </button>
                                 </div>

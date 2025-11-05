@@ -8,8 +8,7 @@ from .hooks import post_init_hook
 from odoo import api, fields, SUPERUSER_ID, _
 
 
-def _uninstall_hook(cr, registry):
-    env = api.Environment(cr, SUPERUSER_ID, {})
+def _uninstall_hook(env):
     xml_ids = [
         'sale.sale_order_personal_rule',
         'sale.sale_order_see_all'

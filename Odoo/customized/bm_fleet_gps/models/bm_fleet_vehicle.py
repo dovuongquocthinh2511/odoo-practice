@@ -980,6 +980,117 @@ class FleetVehicle(models.Model):
         """
         return self.sync_gps_waypoints_by_date(date=None, batch_size=batch_size)
 
+    def get_journey_history_from_api(self, start_time, end_time):
+        """Get journey history directly from ADSUN API for specified time range
+
+        This method is used for historical data retrieval without storing to database.
+        Used by the hybrid system to display historical journey data on the map.
+
+        Args:
+            start_time (datetime): Start time in Vietnam timezone
+            end_time (datetime): End time in Vietnam timezone
+
+        Returns:
+            dict: API response with journey waypoints ready for map display
+                {
+                    'success': bool,
+                    'waypoints': list of waypoint dicts,
+                    'message': str (error message if failed),
+                    'total_points': int
+                }
+        """
+        self.ensure_one()
+
+        if not self.adsun_device_serial_number:
+            return {
+                'success': False,
+                'waypoints': [],
+                'message': 'Vehicle has no GPS device serial configured',
+                'total_points': 0
+            }
+
+        try:
+            # Get active token
+            token = self.env['bm.fleet.adsun.token'].get_active_token()
+
+            _logger.info(
+                f"Fetching journey history for {self.name} from API "
+                f"(Vietnam time: {start_time} to {end_time})"
+            )
+
+            # Call ADSUN API directly
+            response = self._call_get_device_trip_api(
+                self.gps_company_id,
+                self.adsun_device_serial_number,
+                start_time,
+                end_time,
+                token,
+                retry_on_401=True
+            )
+
+            if response.get('Status') == 1:
+                trip_list = response.get('DeviceTripList', [])
+                total_points = len(trip_list)
+
+                if trip_list:
+                    # Convert trip data to waypoint format for map display
+                    waypoints = []
+                    previous_total_distance = None
+
+                    for trip in trip_list:
+                        waypoint_data, previous_total_distance = self._prepare_waypoint_data(
+                            self, trip, previous_total_distance
+                        )
+
+                        if waypoint_data:
+                            waypoints.append(waypoint_data)
+
+                    _logger.info(f"Retrieved {len(waypoints)} waypoints from API for {self.name}")
+
+                    return {
+                        'success': True,
+                        'waypoints': waypoints,
+                        'message': f'Successfully retrieved {len(waypoints)} waypoints',
+                        'total_points': total_points
+                    }
+                else:
+                    return {
+                        'success': True,
+                        'waypoints': [],
+                        'message': 'No journey data found for the specified time range',
+                        'total_points': 0
+                    }
+            else:
+                error_msg = response.get('Description', 'Unknown API error')
+                _logger.error(f"API error for {self.name}: {error_msg}")
+                return {
+                    'success': False,
+                    'waypoints': [],
+                    'message': f'API error: {error_msg}',
+                    'total_points': 0
+                }
+
+        except UserError as e:
+            # Handle authentication and other user errors
+            error_msg = str(e)
+            _logger.error(f"User error fetching journey history for {self.name}: {error_msg}")
+            return {
+                'success': False,
+                'waypoints': [],
+                'message': error_msg,
+                'total_points': 0
+            }
+        except Exception as e:
+            # Handle unexpected errors
+            error_msg = f"Failed to fetch journey history: {str(e)}"
+            _logger.error(f"Unexpected error for {self.name}: {e}")
+            return {
+                'success': False,
+                'waypoints': [],
+                'message': error_msg,
+                'total_points': 0
+            }
+
     def _call_get_device_trip_api(self, company_id, serial, begin_time, end_time, token, retry_on_401=True):
         """Call ADSUN GetDeviceTripBySerial API with automatic token refresh on 401 error
 

@@ -104,6 +104,8 @@
 .vehicle-item {
     transition: all 0.2s ease;
     cursor: pointer;
+    background-color: transparent !important;  /* No background for unselected vehicles */
+    border: 1px solid #dee2e6;  /* Light border for definition */
 }
 
 .vehicle-item:hover {
@@ -111,13 +113,33 @@
     transform: translateX(2px);
 }
 
+/* Green border selection styling for selected vehicle */
+.vehicle-item.vehicle-selected {
+    background-color: transparent !important;  /* No background - transparent */
+    color: #212529 !important;                 /* Dark text for readability */
+    border: 2px solid #28a745 !important;      /* Green border outline */
+    border-left: 4px solid #28a745 !important;  /* Thicker left accent border */
+    box-shadow: 0 0 0 1px rgba(40, 167, 69, 0.25), 0 2px 4px rgba(0,0,0,0.1);  /* Green shadow + depth */
+    font-weight: 500;
+}
+
+.vehicle-item.vehicle-selected:hover {
+    background-color: rgba(40, 167, 69, 0.05) !important;  /* Very subtle green tint on hover */
+    border-color: #1e7e34 !important;                      /* Darker green on hover */
+    transform: translateX(2px);
+}
+
+/* Fallback: Maintain old bg-primary styling with new border approach */
 .vehicle-item.bg-primary {
-    background-color: #0d6efd !important;
-    color: white !important;
+    background-color: transparent !important;  /* No background */
+    color: #212529 !important;                 /* Dark text */
+    border: 2px solid #28a745 !important;      /* Green border */
+    border-left: 4px solid #28a745 !important;  /* Thicker left accent */
 }
 
 .vehicle-item.bg-primary:hover {
-    background-color: #0b5ed7 !important;
+    background-color: rgba(40, 167, 69, 0.05) !important;  /* Subtle green tint */
+    border-color: #1e7e34 !important;                      /* Darker green */
 }
 
 /* Loading State */
@@ -136,73 +158,3 @@
     white-space: nowrap;
 }
 
-/* Legend */
-.bg-light.rounded {
-    background-color: #f8f9fa !important;
-}
-
-/* Route Color Legend */
-.route-legend {
-    position: absolute;
-    bottom: 20px;
-    right: 20px;
-    background: white;
-    padding: 15px;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-    z-index: 1000;
-    min-width: 200px;
-}
-
-.route-legend h6 {
-    margin: 0 0 10px 0;
-    font-size: 14px;
-    font-weight: 600;
-    color: #333;
-}
-
-.legend-item {
-    display: flex;
-    align-items: center;
-    margin-bottom: 8px;
-    font-size: 13px;
-}
-
-.legend-item:last-child {
-    margin-bottom: 0;
-}
-
-.legend-line {
-    width: 30px;
-    height: 4px;
-    margin-right: 10px;
-    border-radius: 2px;
-}
-
-.legend-line.route-to-travel {
-    background: #0066ff;
-    opacity: 0.6;
-}
-
-.legend-line.route-traveled {
-    background: #00cc44;
-    opacity: 0.9;
-}
-
-.legend-line.route-pending {
-    background: #cccccc;
-    opacity: 0.5;
-}
-
-.legend-marker {
-    width: 20px;
-    height: 20px;
-    margin-right: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.legend-marker i {
-    font-size: 16px;
-}

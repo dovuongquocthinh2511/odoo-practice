@@ -1,0 +1,1 @@
+{"context": {"lang": "en_US", "tz": false, "uid": 2}, "db": "postrgres", "debug": "1", "login": "admin", "uid": 2, "session_token": "1ee91dc38f7fd87aaa66ab09991dfc47d8c53a93260e4cafef6cae15f9321afe", "_trace": [{"platform": "windows", "browser": "chrome", "ip_address": "172.19.0.1", "first_activity": 1756358615, "last_activity": 1756388727}]}
