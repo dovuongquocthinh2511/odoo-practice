@@ -209,20 +209,22 @@ __marimo__/
 
 
 # Claude
-.claude/
-.serena/
+Odoo/.claude/
+Odoo/.serena/
 
-.vscode/
-.cursor/
-.idea/
-.marimo/
+Odoo/.vscode/
+Odoo/.cursor/
+Odoo/.idea/
+Odoo/.marimo/
+Odoo/.venv/
+Odoo/gh_cli/
 
 bestmix_addons/
-ccpm/
-claudedocs/
+
 gh_cli/
 task/
-claude2.bat/
+Odoo/claude2.bat/
+
 
 odoo_enterpise_18/
 

@@ -718,18 +718,11 @@ export class FleetJourneyMapWidget extends Component {
 
             this.renderJourneyOnMap(waypoints);
 
-            // Show appropriate notification based on data source
-            if (dataSource === 'database') {
-                this.env.services.notification.add(
-                    `✅ Đã tải ${waypoints.length} điểm GPS từ database (hôm nay)`,
-                    { type: 'success' }
-                );
-            } else {
-                this.env.services.notification.add(
-                    `🌐 Đã tải ${waypoints.length} điểm GPS từ ADSUN API (${dataSource})`,
-                    { type: 'info' }
-                );
-            }
+            // Show notification with simple message
+            this.env.services.notification.add(
+                `✅ Đã tải ${waypoints.length} điểm GPS`,
+                { type: 'success' }
+            );
 
         } catch (error) {
             console.error('💥 Network/RPC Error loading journey from ADSUN API:', {
@@ -888,18 +881,11 @@ export class FleetJourneyMapWidget extends Component {
 
             this.renderJourneyOnMap(waypoints);
 
-            // Show appropriate notification based on data source
-            if (response.source === 'database') {
-                this.env.services.notification.add(
-                    `✅ Đã tải ${waypoints.length} điểm GPS từ database (dữ liệu hôm nay)`,
-                    { type: 'success' }
-                );
-            } else {
-                this.env.services.notification.add(
-                    `🌐 Đã tải ${waypoints.length} điểm GPS từ ADSUN API (khoảng thời gian đã chọn)`,
-                    { type: 'info' }
-                );
-            }
+            // Show notification with simple message
+            this.env.services.notification.add(
+                `✅ Đã tải ${waypoints.length} điểm GPS`,
+                { type: 'success' }
+            );
 
         } catch (error) {
             console.error('Error loading journey from ADSUN API with datetime filter:', error);
@@ -1390,6 +1376,26 @@ export class FleetJourneyMapWidget extends Component {
     }
 
     /**
+     * Calculate compass bearing between two GPS coordinates
+     * Returns bearing in degrees (0-360) where 0° = North, 90° = East, 180° = South, 270° = West
+     */
+    calculateBearing(lat1, lng1, lat2, lng2) {
+        // Convert to radians
+        const φ1 = lat1 * Math.PI / 180;
+        const φ2 = lat2 * Math.PI / 180;
+        const Δλ = (lng2 - lng1) * Math.PI / 180;
+
+        // Calculate bearing using the formula
+        const y = Math.sin(Δλ) * Math.cos(φ2);
+        const x = Math.cos(φ1) * Math.sin(φ2) -
+                  Math.sin(φ1) * Math.cos(φ2) * Math.cos(Δλ);
+
+        // Convert to degrees and normalize to 0-360
+        const bearing = Math.atan2(y, x) * 180 / Math.PI;
+        return (bearing + 360) % 360;
+    }
+
+    /**
      * Get routed path using OSRM (Open Source Routing Machine)
      * This ensures the path follows actual roads instead of straight lines
      * and prevents route from going through buildings
@@ -1581,10 +1587,7 @@ export class FleetJourneyMapWidget extends Component {
         return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
     }
 
-    // Event handler methods for template
-    toggleViewMode() {
-        this.state.viewMode = this.state.viewMode === 'single' ? 'all' : 'single';
-    }
+    // Event handler methods for template are already defined above with proper functionality
 
     toggleAnimation() {
         if (this.state.isPaused) {
@@ -1594,10 +1597,7 @@ export class FleetJourneyMapWidget extends Component {
         }
     }
 
-    setPlaybackSpeed(ev) {
-        const speed = parseFloat(ev.target.dataset.speed);
-        this.state.playbackSpeed = speed;
-    }
+    // Event handler method for template - setPlaybackSpeed is already properly implemented above
 }
 
 FleetJourneyMapWidget.template = "bm_fleet_gps.JourneyMapTemplate";

@@ -40,7 +40,15 @@
       "mcp__serena__write_memory",
       "Bash(timeout:*)",
       "Bash(curl:*)",
-      "Bash(python3:*)"
+      "Bash(python3:*)",
+      "SlashCommand(/sc:brainstorm)",
+      "Bash(backup/backup_info.txt)",
+      "Bash(docker exec:*)",
+      "Bash(docker logs:*)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:www.cybrosys.com)",
+      "WebFetch(domain:kinsta.com)",
+      "Bash(docker compose:*)"
     ],
     "deny": [],
     "ask": []

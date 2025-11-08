@@ -156,7 +156,7 @@ class FleetAddressHistory(models.Model):
                 'limit': limit
             }
 
-            response = requests.get(url, params=params, timeout=5)
+            response = requests.get(url, params=params)
             response.raise_for_status()
 
             data = response.json()
@@ -207,7 +207,7 @@ class FleetAddressHistory(models.Model):
                 'format': 'google'
             }
 
-            response = requests.get(url, params=params, timeout=5)
+            response = requests.get(url, params=params)
             response.raise_for_status()
 
             data = response.json()

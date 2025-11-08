@@ -96,8 +96,7 @@ class ADSUNTokenHelper(models.AbstractModel):
             response = requests.post(
                 f"{auth_url}/Auth/LoginV4",
                 json={'username': username, 'pwd': password},
-                verify=ssl_verify,
-                timeout=10
+                verify=ssl_verify
             )
             response.raise_for_status()
 
@@ -161,8 +160,7 @@ class ADSUNTokenHelper(models.AbstractModel):
                 f"{url}/Device/GetDeviceStatusByCompanyId",
                 params={'companyId': 1},
                 headers={'Authorization': f'Bearer {token}'},
-                verify=ssl_verify,
-                timeout=5
+                verify=ssl_verify
             )
 
             return response.status_code == 200
@@ -200,7 +198,6 @@ class ADSUNTokenHelper(models.AbstractModel):
                 f"{url}/Device/GetDeviceStatusByCompanyId",
                 params=params,
                 headers=headers,
-                timeout=30,
                 verify=ssl_verify
             )
             response.raise_for_status()

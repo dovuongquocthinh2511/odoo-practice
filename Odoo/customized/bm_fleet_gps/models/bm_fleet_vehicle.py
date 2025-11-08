@@ -7,6 +7,7 @@ from odoo import models, fields, api, _
 from odoo.exceptions import UserError
 from ..utils.tz import adsun_time_to_utc
 from ..utils.exceptions import AdsunRequestTokenException
+from ..utils.performance_helper import GPSDataCache, QueryOptimizer, performance_monitor, performance_metrics
 
 _logger = logging.getLogger(__name__)
 
@@ -177,16 +178,42 @@ class FleetVehicle(models.Model):
 
     @api.depends('transportation_journey_ids.latitude', 'transportation_journey_ids.longitude', 'transportation_journey_ids.timestamp')
     def _compute_current_location(self):
-        """Compute current GPS coordinates from latest waypoint"""
+        """Compute current GPS coordinates from latest waypoint with batch optimization"""
+        if not self.ids:
+            return
+
+        # Batch process vehicles to reduce database queries
+        Journey = self.env['bm.fleet.transportation.journey']
+
+        # Get all latest waypoints in one query using DISTINCT ON
+        latest_waypoints = Journey.search_read([
+            ('vehicle_id', 'in', self.ids),
+            ('timestamp', '>=', fields.Datetime.now() - timedelta(days=7))  # Only recent data
+        ], fields=['vehicle_id', 'latitude', 'longitude'],
+        order='vehicle_id, timestamp desc, id desc', limit=len(self.ids))
+
+        # Create mapping of vehicle_id -> latest waypoint
+        waypoint_map = {}
+        for wp in latest_waypoints:
+            vehicle_id = wp['vehicle_id'][0]
+            if vehicle_id not in waypoint_map:  # Keep only the first (latest) per vehicle
+                waypoint_map[vehicle_id] = wp
+
+        # Update vehicles with their latest location
         for vehicle in self:
-            # Use already-loaded transportation_journey_ids instead of searching
-            if vehicle.transportation_journey_ids:
-                latest_waypoint = vehicle.transportation_journey_ids.sorted('timestamp', reverse=True)[:1]
-                vehicle.current_latitude = latest_waypoint.latitude
-                vehicle.current_longitude = latest_waypoint.longitude
+            latest_wp = waypoint_map.get(vehicle.id)
+            if latest_wp:
+                vehicle.current_latitude = latest_wp.get('latitude', 0.0)
+                vehicle.current_longitude = latest_wp.get('longitude', 0.0)
             else:
-                vehicle.current_latitude = 0.0
-                vehicle.current_longitude = 0.0
+                # Fallback to already-loaded journeys if available
+                if vehicle.transportation_journey_ids:
+                    latest_waypoint = vehicle.transportation_journey_ids.sorted('timestamp', reverse=True)[:1]
+                    vehicle.current_latitude = latest_waypoint.latitude
+                    vehicle.current_longitude = latest_waypoint.longitude
+                else:
+                    vehicle.current_latitude = 0.0
+                    vehicle.current_longitude = 0.0
 
     @api.depends('current_latitude', 'current_longitude')
     def _compute_current_address(self):
@@ -492,7 +519,6 @@ class FleetVehicle(models.Model):
             response = requests.get(
                 url,
                 headers=headers,
-                timeout=10,
                 verify=ssl_verify
             )
 
@@ -515,8 +541,8 @@ class FleetVehicle(models.Model):
             return data
 
         except requests.Timeout:
-            _logger.error(f"Violation API timeout for plate {license_plate}")
-            raise UserError(_("Violation API timeout. Check network connection."))
+            _logger.error(f"Violation API timeout for plate {license_plate} - should not happen with timeout disabled")
+            raise UserError(_("Violation API timeout - API server taking too long to respond."))
         except requests.ConnectionError:
             _logger.error(f"Cannot connect to violation API for plate {license_plate}")
             raise UserError(_("Cannot connect to violation API. Check network."))
@@ -706,7 +732,7 @@ class FleetVehicle(models.Model):
                 'User-Agent': 'Odoo Fleet GPS Module/1.0'
             }
 
-            response = requests.get(url, params=params, headers=headers, timeout=10, verify=config['ssl_verify'])
+            response = requests.get(url, params=params, headers=headers, verify=config['ssl_verify'])
             response.raise_for_status()
             data = response.json()
 
@@ -793,7 +819,7 @@ class FleetVehicle(models.Model):
             _logger.info("Calling GetDeviceStatusByCompanyId API for all vehicles status sync")
             
             # Single API call for ALL vehicles
-            response = requests.get(url, params=params, headers=headers, timeout=10, verify=config['ssl_verify'])
+            response = requests.get(url, params=params, headers=headers, verify=config['ssl_verify'])
             response.raise_for_status()
             data = response.json()
             
@@ -1130,7 +1156,7 @@ class FleetVehicle(models.Model):
             # Get SSL verification setting from centralized config helper
             ssl_verify = self._get_ssl_verify()
 
-            response = requests.get(url, params=params, headers=headers, timeout=10, verify=ssl_verify)
+            response = requests.get(url, params=params, headers=headers, verify=ssl_verify)
 
             # Check for 401 before raising exception
             if response.status_code == 401 and retry_on_401:
@@ -1147,7 +1173,7 @@ class FleetVehicle(models.Model):
                     headers['token'] = new_token
 
                     # Retry API call with new token (NO RECURSION)
-                    response = requests.get(url, params=params, headers=headers, timeout=10, verify=ssl_verify)
+                    response = requests.get(url, params=params, headers=headers, verify=ssl_verify)
                     response.raise_for_status()
                     return response.json()
 

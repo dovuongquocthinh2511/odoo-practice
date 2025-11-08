@@ -63,7 +63,7 @@ class GeocodingMixin(models.AbstractModel):
             url = "https://geocode.adsun.vn/Geocode/GetAddress"
             params = {'lat': lat, 'lng': lng}
 
-            response = requests.get(url, params=params, timeout=10, verify=ssl_verify)
+            response = requests.get(url, params=params, verify=ssl_verify)
 
             if response.status_code == 200:
                 data = response.json()
@@ -113,7 +113,7 @@ class GeocodingMixin(models.AbstractModel):
             # Respect rate limit: 1 request/second
             time.sleep(1.1)
 
-            response = requests.get(url, params=params, headers=headers, timeout=10)
+            response = requests.get(url, params=params, headers=headers)
 
             if response.status_code == 200:
                 data = response.json()

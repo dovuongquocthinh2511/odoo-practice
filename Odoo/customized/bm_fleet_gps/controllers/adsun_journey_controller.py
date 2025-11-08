@@ -7,6 +7,7 @@ from datetime import datetime
 from odoo import http
 from odoo.http import request
 from ..utils.exceptions import AdsunRequestTokenException
+from ..utils.performance_helper import QueryOptimizer, performance_monitor, performance_metrics
 from urllib.parse import urlencode
 
 _logger = logging.getLogger(__name__)
@@ -41,23 +42,21 @@ class AdsunJourneyController(http.Controller):
         system used throughout the module.
 
         Returns:
-            dict: API configuration with url, ssl_verify, timeout
+            dict: API configuration with url, ssl_verify
         """
         try:
             # Use the token helper which already has all the configuration
             token_helper = request.env['bm.fleet.adsun.token'].sudo()
             return {
                 'url': token_helper.get_api_url(),
-                'ssl_verify': token_helper.get_ssl_verify(),
-                'timeout': token_helper.get_timeout()
+                'ssl_verify': token_helper.get_ssl_verify()
             }
         except Exception as e:
             _logger.error(f"Failed to get ADSUN API config: {e}")
             # Fallback to environment variables if available
             return {
                 'url': 'https://systemroute.adsun.vn/api',
-                'ssl_verify': True,
-                'timeout': 30
+                'ssl_verify': True
             }
 
     def _transform_waypoint_data(self, api_data):
@@ -168,8 +167,8 @@ class AdsunJourneyController(http.Controller):
             dict: Response with waypoints from appropriate source
         """
         try:
-            _logger.info(f"🔍 Fetching journey history - Vehicle: {vehicle_id}, Device: {device_serial}")
-            _logger.info(f"⏰ Time range: {start_time} to {end_time}")
+            _logger.info(f"Fetching journey history - Vehicle: {vehicle_id}, Device: {device_serial}")
+            _logger.info(f"Time range: {start_time} to {end_time}")
 
             if not vehicle_id:
                 return {
@@ -213,30 +212,35 @@ class AdsunJourneyController(http.Controller):
                     start_dt = datetime.strptime(start_time, '%Y-%m-%d %H:%M:%S')
                     end_dt = datetime.strptime(end_time, '%Y-%m-%d %H:%M:%S')
 
-                    # Search for waypoints within time range
-                    waypoints_db = journey_model.search([
-                        ('vehicle_id', '=', vehicle_id),
-                        ('timestamp', '>=', start_dt),
-                        ('timestamp', '<=', end_dt)
-                    ], order='timestamp asc')
+                    # Use optimized query helper with performance monitoring
+                    start_time = datetime.now()
+                    waypoints_db = QueryOptimizer.get_journey_history_optimized(
+                        request.env, vehicle_id, start_dt, end_dt, limit=10000
+                    )
+                    execution_time = (datetime.now() - start_time).total_seconds()
+
+                    # Record performance metrics
+                    performance_metrics.record_query_time(
+                        'journey_history_query', execution_time, len(waypoints_db)
+                    )
 
                     if waypoints_db:
-                        # Convert database waypoints to API format
+                        # Direct conversion from search_read results (no individual record queries)
                         waypoints_data = []
                         for wp in waypoints_db:
                             waypoints_data.append({
-                                'latitude': wp.latitude,
-                                'longitude': wp.longitude,
-                                'timestamp': wp.timestamp.strftime('%Y-%m-%d %H:%M:%S'),
-                                'speed': wp.speed or 0,
-                                'machine_status': wp.machine_status or False,
-                                'gps_status': wp.gps_status or False,
-                                'address': wp.address or '',
-                                'distance': wp.distance or 0,
+                                'latitude': wp.get('latitude', 0),
+                                'longitude': wp.get('longitude', 0),
+                                'timestamp': wp.get('timestamp', ''),
+                                'speed': wp.get('speed', 0),
+                                'machine_status': wp.get('machine_status', False),
+                                'gps_status': wp.get('gps_status', False),
+                                'address': wp.get('address', ''),
+                                'distance': wp.get('distance', 0),
                                 'source': 'database'
                             })
 
-                        _logger.info(f"✅ Retrieved {len(waypoints_data)} waypoints from database for today")
+                        _logger.info(f"Retrieved {len(waypoints_data)} waypoints from database for today")
                         return {
                             'success': True,
                             'waypoints': waypoints_data,
@@ -257,7 +261,7 @@ class AdsunJourneyController(http.Controller):
                 start_dt_vn = datetime.strptime(start_time, '%Y-%m-%d %H:%M:%S')
                 end_dt_vn = datetime.strptime(end_time, '%Y-%m-%d %H:%M:%S')
 
-                _logger.info(f"🌐 Calling ADSUN API for vehicle {vehicle.name}")
+                _logger.info(f"Calling ADSUN API for vehicle {vehicle.name}")
 
                 # Use vehicle model's new method for API calls
                 result = vehicle.get_journey_history_from_api(start_dt_vn, end_dt_vn)
@@ -276,13 +280,13 @@ class AdsunJourneyController(http.Controller):
                         for waypoint in result['waypoints']:
                             waypoint['source'] = 'api'
 
-                        _logger.info(f"✅ Retrieved {len(result['waypoints'])} waypoints from ADSUN API")
+                        _logger.info(f"Retrieved {len(result['waypoints'])} waypoints from ADSUN API")
                     else:
-                        _logger.info(f"ℹ️ No waypoints found in API for the specified time range")
+                        _logger.info(f"INFO: No waypoints found in API for the specified time range")
 
                     return result
                 else:
-                    _logger.error(f"❌ API call failed: {result.get('message', 'Unknown error')}")
+                    _logger.error(f"ERROR: API call failed: {result.get('message', 'Unknown error')}")
                     return {
                         'success': False,
                         'error': result.get('message', 'API call failed'),
@@ -290,7 +294,7 @@ class AdsunJourneyController(http.Controller):
                     }
 
             except Exception as e:
-                _logger.error(f"❌ Exception during API call: {e}")
+                _logger.error(f"ERROR: Exception during API call: {e}")
                 return {
                     'success': False,
                     'error': f'Failed to fetch journey history: {str(e)}',
@@ -298,14 +302,14 @@ class AdsunJourneyController(http.Controller):
                 }
 
         except AdsunRequestTokenException as e:
-            _logger.error(f"❌ ADSUN authentication error: {e}")
+            _logger.error(f"ERROR: ADSUN authentication error: {e}")
             return {
                 'success': False,
                 'error': f'Authentication failed: {str(e)}',
                 'waypoints': []
             }
         except Exception as e:
-            _logger.error(f"❌ Unexpected error in get_journey_history: {e}")
+            _logger.error(f"ERROR: Unexpected error in get_journey_history: {e}")
             import traceback
             _logger.error(f"Traceback: {traceback.format_exc()}")
             return {
@@ -336,23 +340,26 @@ class AdsunJourneyController(http.Controller):
                     'error': 'Device serial number is required'
                 }
 
-            # Try to get from database first for latest sync
+            # Try to get from database first for latest sync - optimized query
             try:
                 journey_model = request.env['bm.fleet.transportation.journey'].sudo()
-                latest_journey = journey_model.search([
-                    ('vehicle_id.adsun_device_serial', '=', device_serial)
-                ], order='end_time desc', limit=1)
 
-                if latest_journey and latest_journey.waypoint_ids:
-                    latest_waypoint = latest_journey.waypoint_ids.sorted('timestamp', reverse=True)[0]
+                # Direct query for latest waypoint using DISTINCT ON for performance
+                latest_waypoint = journey_model.search_read([
+                    ('vehicle_id.adsun_device_serial', '=', device_serial)
+                ], fields=['latitude', 'longitude', 'timestamp', 'speed', 'address'],
+                order='vehicle_id, timestamp desc, id desc', limit=1)
+
+                if latest_waypoint:
+                    wp = latest_waypoint[0]  # Get first (latest) result
                     return {
                         'success': True,
                         'position': {
-                            'latitude': latest_waypoint.latitude,
-                            'longitude': latest_waypoint.longitude,
-                            'timestamp': latest_waypoint.timestamp.strftime('%Y-%m-%d %H:%M:%S'),
-                            'speed': latest_waypoint.speed,
-                            'address': latest_waypoint.address,
+                            'latitude': wp.get('latitude', 0),
+                            'longitude': wp.get('longitude', 0),
+                            'timestamp': wp.get('timestamp', ''),
+                            'speed': wp.get('speed', 0),
+                            'address': wp.get('address', ''),
                             'source': 'database'
                         },
                         'vehicle_id': vehicle_id,
@@ -381,8 +388,7 @@ class AdsunJourneyController(http.Controller):
             response = requests.get(
                 f"{config['url']}/Device/GetDeviceTripBySerial?{urlencode(params)}",
                 headers=self._get_headers(),
-                verify=config['ssl_verify'],
-                timeout=config['timeout']
+                verify=config['ssl_verify']
             )
 
             if response.status_code == 200:
@@ -436,9 +442,9 @@ class AdsunJourneyController(http.Controller):
             # Test 1: Get API configuration
             try:
                 config = self._get_adsun_api_config()
-                _logger.info(f"✅ API config loaded: {config['url']}")
+                _logger.info(f"API config loaded: {config['url']}")
             except Exception as e:
-                _logger.error(f"❌ API config failed: {e}")
+                _logger.error(f"ERROR: API config failed: {e}")
                 return {
                     'success': False,
                     'error': f'Configuration error: {str(e)}',
@@ -448,9 +454,9 @@ class AdsunJourneyController(http.Controller):
             # Test 2: Get authentication headers
             try:
                 headers = self._get_headers()
-                _logger.info("✅ Authentication headers obtained")
+                _logger.info("Authentication headers obtained")
             except Exception as e:
-                _logger.error(f"❌ Authentication failed: {e}")
+                _logger.error(f"ERROR: Authentication failed: {e}")
                 return {
                     'success': False,
                     'error': f'Authentication error: {str(e)}',
@@ -470,14 +476,14 @@ class AdsunJourneyController(http.Controller):
                         'warning': 'No vehicles with ADSUN device serial found',
                         'test_stage': 'no_vehicles',
                         'config': config,
-                        'authentication': '✅ Working'
+                        'authentication': 'Working'
                     }
 
                 test_vehicle = vehicles[0]
-                _logger.info(f"✅ Found test vehicle: {test_vehicle.name} ({test_vehicle.adsun_device_serial})")
+                _logger.info(f"Found test vehicle: {test_vehicle.name} ({test_vehicle.adsun_device_serial})")
 
             except Exception as e:
-                _logger.error(f"❌ Vehicle query failed: {e}")
+                _logger.error(f"ERROR: Vehicle query failed: {e}")
                 return {
                     'success': False,
                     'error': f'Database error: {str(e)}',
@@ -502,8 +508,7 @@ class AdsunJourneyController(http.Controller):
                 response = requests.get(
                     f"{config['url']}/Device/GetDeviceTripBySerial?{urlencode(params)}",
                     headers=headers,
-                    verify=config['ssl_verify'],
-                    timeout=config['timeout']
+                    verify=config['ssl_verify']
                 )
 
                 if response.status_code == 200:
@@ -515,7 +520,7 @@ class AdsunJourneyController(http.Controller):
                         'message': 'All tests passed successfully',
                         'test_stage': 'completed',
                         'config': config,
-                        'authentication': '✅ Working',
+                        'authentication': 'Working',
                         'vehicle_tested': {
                             'id': test_vehicle.id,
                             'name': test_vehicle.name,
@@ -536,21 +541,21 @@ class AdsunJourneyController(http.Controller):
                     }
 
             except requests.exceptions.Timeout:
-                _logger.error("❌ Request timeout")
+                _logger.error("Request timeout - this should not happen with timeout disabled")
                 return {
                     'success': False,
-                    'error': 'Request timeout - API server not responding',
+                    'error': 'Request timeout - API server taking too long to respond',
                     'test_stage': 'timeout'
                 }
             except requests.exceptions.ConnectionError as e:
-                _logger.error(f"❌ Connection error: {e}")
+                _logger.error(f"Connection error: {e}")
                 return {
                     'success': False,
                     'error': f'Connection error: {str(e)}',
                     'test_stage': 'connection'
                 }
             except Exception as e:
-                _logger.error(f"❌ API test failed: {e}")
+                _logger.error(f"API test failed: {e}")
                 return {
                     'success': False,
                     'error': f'API test error: {str(e)}',
