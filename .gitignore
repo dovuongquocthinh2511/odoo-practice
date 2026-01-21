@@ -214,6 +214,7 @@ __marimo__/
 
 .vscode/
 .cursor/
+.kiro/
 .idea/
 .marimo/
 .venv/
@@ -221,12 +222,20 @@ gh_cli/
 
 bestmix_addons/
 
-gh_cli/
 task/
 claude2.bat/
+monitor_logs.sh/
 
 
 odoo_enterpise_18/
+nul/
 
+# attendance-system-pro
+/attendance-system-pro
 
+# bestmix-pro
+/bestmix-pro
+
+# odoo
+/odoo
 
