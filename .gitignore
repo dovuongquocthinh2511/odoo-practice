@@ -223,12 +223,9 @@ gh_cli/
 bestmix_addons/
 
 task/
-claude2.bat/
-monitor_logs.sh/
 
-
+#Odoo enterprise
 odoo_enterpise_18/
-nul/
 
 # attendance-system-pro
 /attendance-system-pro
