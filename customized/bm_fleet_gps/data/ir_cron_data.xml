@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- Cron 1: Sync GPS Waypoints (Every 5 minutes) -->
+        <!-- Syncs trip history (waypoints) for all configured vehicles -->
+        <record id="ir_cron_sync_gps_waypoints" model="ir.cron">
+            <field name="name">GPS: Đồng bộ lịch sử di chuyển (waypoints)</field>
+            <field name="model_id" ref="fleet.model_fleet_vehicle"/>
+            <field name="state">code</field>
+            <field name="code">model.cron_sync_gps_waypoints()</field>
+            <field name="interval_number">5</field>
+            <field name="interval_type">minutes</field>
+            <field name="active" eval="True"/>
+            <field name="user_id" ref="base.user_admin"/>
+            <field name="priority">5</field>
+        </record>
+
+        <!-- Cron 2: Sync Vehicle Real-time Status (Every 1 minute) -->
+        <!-- Syncs real-time status (GPS on/off, location, speed) for ALL vehicles with 1 API call -->
+        <record id="ir_cron_sync_vehicle_status" model="ir.cron">
+            <field name="name">GPS: Đồng bộ tình trạng xe real-time</field>
+            <field name="model_id" ref="fleet.model_fleet_vehicle"/>
+            <field name="state">code</field>
+            <field name="code">model.cron_sync_vehicle_status()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">minutes</field>
+            <field name="active" eval="True"/>
+            <field name="user_id" ref="base.user_admin"/>
+            <field name="priority">10</field>
+        </record>
+
+        <!-- Cron 3: Fetch Missing Addresses (Every 2 hours) -->
+        <!-- Processes up to 100 waypoints per run to respect OpenStreetMap rate limits -->
+        <record id="ir_cron_fetch_missing_addresses" model="ir.cron">
+            <field name="name">GPS: Lấy địa chỉ cho waypoints</field>
+            <field name="model_id" ref="bm_fleet_gps.model_bm_fleet_transportation_journey"/>
+            <field name="state">code</field>
+            <field name="code">model.cron_fetch_missing_addresses()</field>
+            <field name="interval_number">2</field>
+            <field name="interval_type">hours</field>
+            <field name="active" eval="True"/>
+            <field name="user_id" ref="base.user_admin"/>
+            <field name="priority">1</field>
+        </record>
+
+    </data>
+</odoo>

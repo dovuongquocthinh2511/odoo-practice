@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="action_demo_course" model="ir.actions.act_window">
+            <field name="name">Courses</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">demo_course.course</field>
+        </record>
+
+        <record id="action_demo_class" model="ir.actions.act_window">
+            <field name="name">Classes</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">demo_course.class</field>
+        </record>
+
+        <record id="action_demo_student" model="ir.actions.act_window">
+            <field name="name">Students</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">demo_course.student</field>
+        </record>
+
+        <record id="action_demo_register" model="ir.actions.act_window">
+            <field name="name">Register</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">demo_course.register</field>
+        </record>
+
+        <menuitem id="menu_demo_main"
+            name="Course Management"
+            sequence="1"
+            groups="base.group_user"/>
+        
+        <menuitem id="menu_demo_course"
+            name="Courses"
+            sequence="10"
+            parent="menu_demo_main"
+            action="action_demo_course"
+            groups="base.group_user"/>
+        
+        <menuitem id="menu_demo_class"
+            name="Classes"
+            sequence="20"
+            parent="menu_demo_main"
+            action="action_demo_class"
+            groups="base.group_user"/>
+
+        <menuitem id="menu_demo_student"
+            name="Students"
+            sequence="30"
+            parent="menu_demo_main"
+            action="action_demo_student"
+            groups="base.group_user"/>
+
+        <menuitem id="menu_demo_register"
+            name="Register"
+            sequence="40"
+            parent="menu_demo_main"
+            action="action_demo_register"
+            groups="base.group_user"/>
+    </data>
+</odoo>

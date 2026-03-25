@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Sequence for Fleet Service Booking Reference Code -->
+    <record id="seq_fleet_service_booking" model="ir.sequence">
+        <field name="name">Fleet Service Booking</field>
+        <field name="code">fleet.vehicle.log.services</field>
+        <field name="prefix">FSB/%(year)s/%(month)s/</field>
+        <field name="padding">4</field>
+        <field name="number_increment">1</field>
+        <field name="number_next">1</field>
+        <field name="implementation">standard</field>
+        <field name="company_id" eval="False"/>
+    </record>
+</odoo>

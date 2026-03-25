@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Fleet Vehicle Form View - GPS Tab -->
+    <record id="fleet_vehicle_view_form_gps" model="ir.ui.view">
+        <field name="name">fleet.vehicle.form.gps</field>
+        <field name="model">fleet.vehicle</field>
+        <field name="inherit_id" ref="fleet.fleet_vehicle_view_form"/>
+        <field name="arch" type="xml">
+
+            <!-- Redirect all Services buttons to Booking Wizard -->
+            <!-- Button 1: Normal state (service_activity = none) -->
+            <xpath expr="//button[@name='return_action_to_open'][@icon='fa-wrench'][@invisible=&quot;service_activity != 'none'&quot;]" position="attributes">
+                <attribute name="name">action_open_service_booking_wizard</attribute>
+            </xpath>
+
+            <!-- Button 2: Overdue state (service_activity = overdue) -->
+            <xpath expr="//button[@name='return_action_to_open'][@icon='fa-wrench'][@invisible=&quot;service_activity != 'overdue'&quot;]" position="attributes">
+                <attribute name="name">action_open_service_booking_wizard</attribute>
+            </xpath>
+
+            <!-- Button 3: Today state (service_activity = today) -->
+            <xpath expr="//button[@name='return_action_to_open'][@icon='fa-wrench'][@invisible=&quot;service_activity != 'today'&quot;]" position="attributes">
+                <attribute name="name">action_open_service_booking_wizard</attribute>
+            </xpath>
+
+            <!-- Change Services button label to "Booking" -->
+            <xpath expr="//field[@name='service_count']" position="attributes">
+                <attribute name="string">Booking</attribute>
+            </xpath>
+
+            <!-- Restore original Drivers History button label -->
+            <xpath expr="//button[@name='open_assignation_logs']/field[@name='history_count']" position="attributes">
+                <attribute name="string">Driver History</attribute>
+            </xpath>
+
+            <!-- Add new Transportation Journey button (GPS trips) -->
+            <xpath expr="//button[@name='open_assignation_logs']" position="after">
+                <button class="oe_stat_button"
+                        type="object"
+                        name="action_view_transportation_journeys"
+                        icon="fa-road"
+                        help="View GPS transportation journeys">
+                    <field string="Transportation Journey" name="transportation_journey_count" widget="statinfo"/>
+                </button>
+            </xpath>
+
+            <!-- Add GPS sync button in header -->
+            <xpath expr="//header" position="inside">
+                <button name="action_sync_today_waypoints"
+                        type="object"
+                        string="Sync GPS Today"
+                        class="oe_highlight"
+                        invisible="adsun_device_serial_number == False"
+                        help="Sync today's GPS location data"/>
+            </xpath>
+
+            <!-- Add GPS Tracking tab (Hidden for regular users) -->
+            <xpath expr="//notebook" position="inside">
+                <page string="GPS Tracking" name="gps_tracking" groups="bm_fleet_gps.group_bm_fleet_sale_admin,base.group_system">
+                    <group>
+                        <group string="GPS Device Configuration">
+                            <field name="adsun_device_serial_number"/>
+                            <field name="gps_company_id"/>
+                            <field name="branch_id"/>
+                        </group>
+                        <group string="Current Status">
+                            <field name="current_latitude"/>
+                            <field name="current_longitude"/>
+                            <field name="current_address"/>
+                            <field name="last_update"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Fuel Consumption">
+                            <field name="fuel_consumption" widget="float"/>
+                            <field name="total_fuel_used" widget="float" readonly="1"/>
+                        </group>
+                    </group>
+                </page>
+
+                <!-- Traffic Violation Checking -->
+                <page string="Traffic Violations" name="violation_check" groups="bm_fleet_gps.group_bm_fleet_sale_admin,base.group_system">
+                    <group>
+                        <group string="Violation Status">
+                            <field name="violation_status" widget="badge"
+                                   decoration-danger="violation_status == 'pending'"
+                                   decoration-success="violation_status == 'none'"
+                                   decoration-info="violation_status == 'paid'"/>
+                            <field name="violation_count"/>
+                            <field name="violation_checked_time"/>
+                        </group>
+                        <group string="Latest Violation Information">
+                            <field name="violation_time"/>
+                            <field name="violation_location"/>
+                            <field name="violation_behavior"/>
+                            <field name="violation_detecting_unit"/>
+                        </group>
+                    </group>
+                    <div class="oe_button_box mt-3">
+                        <button name="action_manual_check_violation"
+                                type="object"
+                                string="Check Violations"
+                                class="oe_highlight"
+                                icon="fa-search"
+                                help="Check traffic violations via iphatnguoi.com API"/>
+                    </div>
+                    <group>
+                        <field name="violation_api_response" groups="base.group_no_one"/>
+                    </group>
+                </page>
+            </xpath>
+
+            <!-- Hide future_driver_id field in form view -->
+            <xpath expr="//field[@name='future_driver_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+        </field>
+    </record>
+
+    <!-- Fleet Vehicle List View - GPS Columns -->
+    <record id="fleet_vehicle_view_list_gps" model="ir.ui.view">
+        <field name="name">fleet.vehicle.list.gps</field>
+        <field name="model">fleet.vehicle</field>
+        <field name="inherit_id" ref="fleet.fleet_vehicle_view_tree"/>
+        <field name="arch" type="xml">
+            <!-- Add GPS fields to list view after tag_ids -->
+            <xpath expr="//field[@name='tag_ids']" position="after">
+                <field name="branch_id" optional="hide"/>
+                <field name="current_address" optional="hide"/>
+                <field name="last_update" optional="hide"/>
+                <field name="violation_status" optional="hide"
+                       decoration-danger="violation_status == 'pending'"
+                       decoration-success="violation_status == 'none'"/>
+                <field name="violation_count" optional="hide"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Fleet Vehicle Search View - GPS Filters -->
+    <record id="fleet_vehicle_view_search_gps" model="ir.ui.view">
+        <field name="name">fleet.vehicle.search.gps</field>
+        <field name="model">fleet.vehicle</field>
+        <field name="inherit_id" ref="fleet.fleet_vehicle_view_search"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//search" position="inside">
+                <separator/>
+                <filter string="Has Pending Violations" name="has_pending_violations"
+                        domain="[('violation_status', '=', 'pending')]"
+                        help="Vehicles with pending traffic violations"/>
+                <filter string="No Violations" name="no_violations"
+                        domain="[('violation_status', '=', 'none')]"
+                        help="Vehicles with no violations"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter string="Branch" name="group_by_branch" domain="[]" context="{'group_by': 'branch_id'}"/>
+                    <filter string="Violation Status" name="group_by_violation_status"
+                            domain="[]" context="{'group_by': 'violation_status'}"/>
+                </group>
+            </xpath>
+
+        </field>
+    </record>
+
+    <!-- GPS Vehicles List View (dedicated for GPS menu) -->
+    <record id="fleet_vehicle_view_list_gps_main" model="ir.ui.view">
+        <field name="name">fleet.vehicle.list.gps.main</field>
+        <field name="model">fleet.vehicle</field>
+        <field name="priority">20</field>
+        <field name="arch" type="xml">
+            <list string="GPS Vehicles">
+                <field name="name"/>
+                <field name="license_plate"/>
+                <field name="adsun_device_serial_number"/>
+                <field name="branch_id"/>
+                <field name="current_address"/>
+                <field name="last_update"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Fleet Vehicle Kanban View - GPS Enhancement -->
+    <record id="fleet_vehicle_view_kanban_gps" model="ir.ui.view">
+        <field name="name">fleet.vehicle.kanban.gps</field>
+        <field name="model">fleet.vehicle</field>
+        <field name="inherit_id" ref="fleet.fleet_vehicle_view_kanban"/>
+        <field name="arch" type="xml">
+
+            <!-- Declare GPS fields for kanban -->
+            <xpath expr="//field[@name='contract_renewal_overdue']" position="after">
+                <field name="current_address"/>
+                <field name="vehicle_status"/>
+            </xpath>
+
+            <!-- Hide original tags field to reposition -->
+            <xpath expr="//field[@name='tag_ids']" position="replace"/>
+
+            <!-- Hide original driver fields to reposition -->
+            <xpath expr="//field[@name='driver_id']" position="replace"/>
+            <xpath expr="//div[@class='small'][t[@t-if='record.future_driver_id.raw_value']]" position="replace"/>
+
+            <!-- Hide original location to reposition -->
+            <xpath expr="//t[@t-if='record.location.raw_value']" position="replace"/>
+
+            <!-- Insert reorganized structure after license/model title -->
+            <xpath expr="//div[field[@name='model_id']]" position="after">
+                <!-- 1. Tags -->
+                <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+
+                <!-- 2. Driver Info -->
+                <field t-if="record.driver_id.raw_value" name="driver_id" widget="many2one_avatar" options="{'display_avatar_name': True}" class="small pt-1 pb-1"/>
+                <div class="small">
+                    <t t-if="record.future_driver_id.raw_value">Future Driver : <field name="future_driver_id"/></t>
+                </div>
+
+                <!-- 3. Location -->
+                <t t-if="record.location.raw_value">
+                    <small><i class="fa fa-map-marker" title="Location"/> <field name="location"/></small>
+                </t>
+
+                <!-- 4. GPS Address -->
+                <t t-if="record.current_address.raw_value">
+                    <small><i class="fa fa-map-marker text-primary" title="GPS Address"/> <field name="current_address"/></small>
+                </t>
+
+                <!-- 5. Vehicle Status (prominent badge at bottom) -->
+                <div t-if="record.vehicle_status.raw_value" style="margin-top: 5px; margin-bottom: 5px;">
+                    <span t-if="record.vehicle_status.raw_value === 'running'"
+                          class="badge badge-success"
+                          style="font-size: 13px; padding: 5px 10px;"
+                          title="Vehicle is in use - Engine running">
+                        <i class="fa fa-circle" style="color: #00ff00;"/> In Use
+                    </span>
+                    <span t-elif="record.vehicle_status.raw_value === 'idle'"
+                          class="badge badge-warning"
+                          style="font-size: 13px; padding: 5px 10px;"
+                          title="Vehicle is parked - Engine off">
+                        <i class="fa fa-circle" style="color: #ffa500;"/> Parked
+                    </span>
+                    <span t-else=""
+                          class="badge badge-secondary"
+                          style="font-size: 13px; padding: 5px 10px;"
+                          title="GPS connection lost or no recent data">
+                        <i class="fa fa-circle-o"/> GPS Offline
+                    </span>
+                </div>
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- API Credentials -->
+        <record id="config_gps_api_username" model="ir.config_parameter">
+            <field name="key">bm_fleet_gps.api_username</field>
+            <field name="value">sieucuong</field>
+        </record>
+
+        <record id="config_gps_api_password" model="ir.config_parameter">
+            <field name="key">bm_fleet_gps.api_password</field>
+            <field name="value">12345</field>
+        </record>
+
+        <!-- Default Company ID -->
+        <record id="config_gps_default_company_id" model="ir.config_parameter">
+            <field name="key">bm_fleet_gps.default_company_id</field>
+            <field name="value">1136</field>
+        </record>
+
+        <!-- Data Retention Policy (days) -->
+        <record id="config_gps_retention_days" model="ir.config_parameter">
+            <field name="key">bm_fleet_gps.retention_days</field>
+            <field name="value">90</field>
+        </record>
+
+        <!-- Pagination Settings for Performance -->
+        <record id="config_gps_sync_batch_size" model="ir.config_parameter">
+            <field name="key">bm_fleet_gps.sync_batch_size</field>
+            <field name="value">100</field>
+        </record>
+
+        <record id="config_gps_delete_batch_size" model="ir.config_parameter">
+            <field name="key">bm_fleet_gps.delete_batch_size</field>
+            <field name="value">500</field>
+        </record>
+
+        <!-- Geocoding Batch Limit (for cron job) -->
+        <record id="config_geocoding_batch_limit" model="ir.config_parameter">
+            <field name="key">bm_fleet_gps.geocoding_batch_limit</field>
+            <field name="value">100</field>
+        </record>
+
+        <!-- API Base URL for GPS Data -->
+        <record id="config_gps_api_url" model="ir.config_parameter">
+            <field name="key">bm_fleet_gps.api_url</field>
+            <field name="value">https://systemroute.adsun.vn/api</field>
+        </record>
+
+        <!-- Authentication API URL -->
+        <record id="config_gps_auth_url" model="ir.config_parameter">
+            <field name="key">bm_fleet_gps.auth_url</field>
+            <field name="value">https://auth.adsun.vn</field>
+        </record>
+
+        <!-- OpenMap.vn API Configuration -->
+        <!-- API key is stored securely in system parameters -->
+        <!-- Can be updated via Settings > Technical > System Parameters -->
+        <record id="openmap_api_key" model="ir.config_parameter">
+            <field name="key">openmap.api.key</field>
+            <field name="value">SWaozQyRpfeTZFzoee2XGviK1LJ7Sslk</field>
+        </record>
+
+        <!-- Token Management -->
+        <record id="config_gps_api_token" model="ir.config_parameter">
+            <field name="key">bm_fleet_gps.api_token</field>
+            <field name="value"></field>
+        </record>
+
+        <record id="config_gps_token_expires_at" model="ir.config_parameter">
+            <field name="key">bm_fleet_gps.token_expires_at</field>
+            <field name="value"></field>
+        </record>
+
+        <!-- Security -->
+        <record id="config_gps_ssl_verify" model="ir.config_parameter">
+            <field name="key">bm_fleet_gps.ssl_verify</field>
+            <field name="value">True</field>
+        </record>
+
+        <!-- Traffic Violation Check API (iphatnguoi.com) -->
+        <record id="config_violation_check_enabled" model="ir.config_parameter">
+            <field name="key">bm_fleet_gps.violation_check_enabled</field>
+            <field name="value">True</field>
+        </record>
+
+        <record id="config_violation_api_url" model="ir.config_parameter">
+            <field name="key">bm_fleet_gps.violation_api_url</field>
+            <field name="value">https://iphatnguoi.com/api/check-violation</field>
+        </record>
+
+        <record id="config_violation_cache_hours" model="ir.config_parameter">
+            <field name="key">bm_fleet_gps.violation_cache_hours</field>
+            <field name="value">24</field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<odoo>
-    <!-- Default Service Type for Fleet Service Bookings -->
-    <record id="fleet_service_type_booking" model="fleet.service.type">
-        <field name="name">Đặt xe</field>
-        <field name="category">service</field>
-    </record>
-</odoo>

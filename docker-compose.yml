@@ -1,0 +1,59 @@
+services:
+  odoo:
+    build: ./box
+    ports:
+      - "8069:8069"
+      - "5678:5678"  # Debug port for debugpy
+    volumes:
+      - ./customized:/mnt/extra-addons
+      - ./odoo_enterprise_18:/mnt/odoo_enterprise_18
+      - ./odoo.conf:/etc/odoo/odoo.conf
+      - odoo_data:/var/lib/odoo
+    user: odoo
+    environment:
+      - PYTHONUNBUFFERED=1  # Enable real-time logging for debugging
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8069" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    depends_on:
+      - postgres
+      - mailhog
+      # - nginx
+    restart: unless-stopped
+    tty: true
+    # Debug mode: Uncomment dòng dưới và comment dòng "Normal mode" để debug với VS Code
+    # command: python3 -Xfrozen_modules=off -m debugpy --listen 0.0.0.0:5678 --wait-for-client /usr/bin/odoo -c /etc/odoo/odoo.conf
+    # Normal mode: Chạy Odoo bình thường
+    command: odoo -c /etc/odoo/odoo.conf
+
+  mailhog:
+    image: mailhog/mailhog:latest
+    container_name: mailhog
+    restart: unless-stopped
+    ports:
+      - "1025:1025"  # SMTP port
+      - "8025:8025"  # Web UI port
+    healthcheck:
+      test: [ "CMD", "wget", "--spider", "--quiet", "http://localhost:8025" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  postgres:
+    image: postgres:13
+    ports:
+      - "5435:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: odoo
+      POSTGRES_PASSWORD: odoo
+    tty: true
+
+volumes:
+  odoo_data:
+  postgres_data:
